@@ -2232,12 +2232,12 @@ d3.xml("southsea.svg", function(error, xmlDocument) {
                 if(temp_lan=="chinese"){
                     if(d.properties.hasData==1&&d==temp_country) return d.properties.chinese_name.split(" ")[0]+" "+detail_text
                     if(hasPath==1&&hasRelation(d,temp_country)==1){
-                        return d.properties.chinese_name.split(" ")[0]
+                        return d.properties.chinese_name.split(" ")[0]+" "+detail_text
                 }
                 }
                 if(d.properties.hasData==1&&d==temp_country) return d.properties.name.split(" ")[0]+" "+detail_text
                 if(hasPath==1&&hasRelation(d,temp_country)==1){
-                    return d.properties.name.split(" ")[0]
+                    return d.properties.name.split(" ")[0]+" "+detail_text
                 }
             })
             .style("fill-opacity",1)
@@ -2632,8 +2632,7 @@ d3.xml("southsea.svg", function(error, xmlDocument) {
         //console.log(mapDataFile)
         //console.log(pathDataFile)
         //console.log(componentDataFile)
-        let timeout=1500
-        if(selected_dataset=="support") timeout=2500
+        let timeout=3500
         if(temp_map=="china"){
             proj=proj_china
             path = d3.geoPath().projection(proj);
@@ -2940,7 +2939,7 @@ d3.xml("southsea.svg", function(error, xmlDocument) {
             $(".titleText").text("Map Visualization Library")
             d3.selectAll(".country_text")
                 .text(function(d){
-                    if(d.properties.hasData==1) return d.properties.name.split(" ")[0]
+                    if(d.properties.hasData==1&&d.properties.chinese_name.length<3) return d.properties.name.split(" ")[0]
                     else return ""
                 })
             d3.selectAll(".country_text2")
