@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1"/>
+    <title>Map Visualization Library</title>
+ 
+    <style>
+        html,body{
+            //background:rgb(200,200,200);
+            background:rgb(255,255,255);
+            width:100%;
+            height:100%;
+        }
+        @font-face {
+            font-family: Khand-Regular;
+            src: url(./font/Khand-Regular.ttf)
+        }
+        @font-face {
+            font-family: PingFang-SC;
+            src: url(./font/PingFang-SC-Regular.ttf)
+        }
+        text{
+            font-family: Khand-Regular PingFang-SC;
+        }
+        .source_text{
+            font-family: Khand-Regular PingFang-SC;
+        }
+        .title{
+                fill:rgb(192,143,145);
+                font-weight: bold;
+                text-decoration:underline;
+        }
+        .subtitle{
+            fill:rgb(60,60,60);
+                font-weight: 550;
+            font-family: PingFang-SC;
+        }
+        .shadow{
+              stroke: white;
+              font-weight: bold;
+              text-decoration:underline;
+              stroke-width: 0.4%;
+              opacity: 0.7;
+
+        }
+        .point_text{
+
+            font-family: Khand-Regular PingFang-SC;
+        }
+        .point_text_shadow{
+
+             font-family: Khand-Regular PingFang-SC;
+              stroke: white;
+              font-size: 60%;
+              stroke-width: 0.2%;
+              opacity: 0.9;
+
+        }
+        .source_text{
+                fill:rgb(80,80,80);
+                //font-weight: bold;
+                font-family: PingFang-SC;
+                text-decoration:underline;
+        }
+        .state {
+            //fill: rgb(160,160,160);
+            fill: rgb(243,243,243);
+            stroke: rgb(200,200,200);
+            stroke-width: 0.06%;
+            cursor:pointer;
+        }
+        .axis path,
+        .axis line{
+            fill: none;
+            stroke: rgb(160,160,160);
+            stroke-width:0.15vh;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-size: 1vmin;
+        }
+        .links{
+        fill:none;
+        /*stroke:rgb(227,113,40);*/
+        stroke: rgb(190,190,190);
+        stroke-width:0.2%;
+         }
+        .title_text{
+            font-size: 30;
+            fill: #ffffff;
+            fill-opacity: .4;
+        }
+        .country_text{
+            fill:rgb(50,50,50);
+            fill-opacity:1;
+            cursor:pointer;
+            font-weight: bold;
+            font-family: PingFang-SC Khand-Regular;
+        }
+        .country_text2{
+            fill:rgb(50,50,50);
+            fill-opacity:1;
+            cursor:pointer;
+            font-weight: bold;
+            font-family: PingFang-SC Khand-Regular;
+        }
+        .mouseover_text_1{
+            fill:rgb(50,50,50);
+            fill-opacity:.8;
+            cursor:pointer;
+            font-family: PingFang-SC;
+        }
+        .mouseover_text_2{
+            fill:rgb(50,50,50);
+            fill-opacity:.8;
+            cursor:pointer;
+            font-family: PingFang-SC;
+        }
+        .country_num_text{
+            cursor: pointer;
+        }
+        .range_name{
+            fill:white;
+            fill-opacity:0.8;
+            font-weight:bold;
+        }
+        .range_text{
+            font-weight: bold;
+        }
+
+        .rect{
+            /*stroke: rgb(200,200,200);*/
+        }
+
+        #floor {            
+            clear: both;
+            display: block;
+            text-align: center; 
+            margin: 0px auto;
+            position: absolute;
+            bottom: 0px;
+            left:45%;
+            width: 50%;
+            height: 6%;
+            font-size:1.5vmin;
+            color: rgb(60,60,60);
+            font-family: Khand-Regular;
+        }
+        #floor_text{           
+            position: absolute;
+            top:0;
+            left:4vmin;
+        }
+        #header{
+            position: absolute;
+            top:0%;
+            left:0%;
+            width:100%;
+            height:6%;
+            border:.2vmin solid rgb(60,60,60);
+            background:rgb(40,40,40);
+        }
+        .titleText{           
+            position: absolute;
+            left:2%;
+            top:10%;
+            font-size:3vh;
+            font-family: Khand-Regular;
+            color:rgb(180,180,180);
+        }
+        #mapPanel{
+            position: absolute;
+            top:6%;
+            left:0;
+            width:100%;
+            height:94%;
+
+            //border:.2vmin solid rgb(60,60,60);
+        }
+        .selectBox{
+            box-shadow: -.6rem 0 .6rem 0 rgba(0, 0, 0, 0.4);
+        }
+        .selectPanel{
+            position: absolute;
+            top:6%;
+            left:0%;
+            width:15%;
+            height:94%;
+            border:.3vmin solid rgb(60,60,60);
+            font-size:2vmin; 
+            font-family: Khand-Regular
+        }
+            .generateMap{
+                position: relative;
+                top:1%;
+                left:2%;
+                width:96%;
+                height:20%;        
+            }
+                .selectTitle{
+                    position: absolute;
+                    top:1%;
+                    left:5%;
+                    width:95%;
+                    height:5%;
+                    font-size:2.5vmin; 
+                }
+                .existData{
+                    position: absolute;
+                    top:20%;
+                    left:10%;
+                    width:90%;
+                    height:75%;            
+                }
+            .changeStyle{
+                position: relative;
+                top:2%;
+                left:2%;
+                width:96%;
+                height:26%;        
+            }
+                .styleTypes{
+                    position: absolute;
+                    top:15%;
+                    left:10%;
+                    width:90%;
+                    height:75%;  
+                }
+            .uploadData{
+                position: relative;
+                top:3%;
+                left:2%;
+                width:96%;
+                height:50%;        
+            }
+                .uploadPanel{
+                    position: absolute;
+                    top:10%;
+                    left:10%;
+                    width:82%;
+                    height:40%;
+                    background-color:rgb(190,190,190);
+                    font-size:1.8vmin;
+                }
+                .detailsText{
+                    position: absolute;
+                    top:6%;
+                    left:5%;
+                    width:90%;
+                    font-family: "Georgia";
+                }
+        .mybutton{
+            background-color: rgb(220,220,220);
+            color: rgb(80,80,80);
+            border: 0.2vmin solid rgb(160,160,160);
+            -moz-border-radius:1vmin;  
+            -webkit-border-radius:1vmin;  
+            font-size: 1.7vmin;
+            text-align: center;
+        }
+        #chiButton{           
+            position: absolute;
+            top:20%;
+            left:88%;
+            width:4vmax;
+            height: 60%;
+        }
+        #engButton{           
+            position: absolute;
+            top:20%;
+            left:94%;
+            width:4vmax;
+            height: 60%;
+        }
+
+        .partitionLine{
+            position: absolute;
+            top:4.5%;
+            left:15%;
+        }
+
+
+    }
+
+    option{
+        width:100%;
+        background:none;
+        border:4px dashed #ccc;
+    }
+    select{
+        width:90%;
+        height:3.2vh;
+        border:0px solid #6699FF;
+        background-color:rgb(240,240,240);
+        font-size:2vmin;
+    }
+    div text{
+        font-family:Arial;
+    }
+    #hide_img{
+      position: absolute;
+      top: 70%;
+      left: 15.1%;
+      height: 6vmin;
+      width: 3vmin;
+  }
+  #show_img{
+      position: absolute;
+      top: 70%;
+      left: 1%;
+      height: 6vmin;
+      width: 3vmin;
+  }
+  #icon_img{
+      position: absolute;
+      top: 5%;
+      left: 0;
+      height: 3.8vmin;
+      width: 3.8vmin;
+  }
+  .map_div{
+    position: absolute;
+    box-shadow:-2px 0px 3px 3px rgba(20,20,20,0.05);
+    border-radius:5px;
+  }
+
+    </style>
+</head>
+ 
+<body>
+<div id="header">
+    <div class="titleText">Map Visualization Library</div>
+        <button onclick="changeLanChinese()" class="mybutton" id="chiButton">中</button>
+        <button onclick="changeLanEnglish()" class="mybutton" id="engButton">EN</button>
+</div>
+<div id="mapPanel">
+    <div id="floor">
+        <img id="icon_img" src="icon.png"/>
+        <div id="floor_text">
+        北京大学可视化与可视分析实验室<br>
+        PKU Visualization and Visual Analytics Group
+        </div>
+    </div>
+</div>
+<!--div class="partitionLine"><hr style="height:100vh;fill:rgb(60,60,60)"></div!-->
+<img id="hide_img" onclick="HideLeftView()" src="hidden.png" style="display: none;"/>
+<img id="show_img" onclick="ShowLeftView()" src="show.png" style="display: none;"/>
+<div class="selectPanel" id="LeftSelectPanel" style="display: none;">
+    <div class="generateMap selectBox">
+        <div class="selectTitle">
+            <span>Generate map</span>
+        </div>
+        <div class="existData">
+            <span>Select base map</span><br>
+            <select name="test" onchange="changeBasicMap(this.options[this.options.selectedIndex].value)">
+                <option value="world">world</option>
+                <!--option value="china">china</option!-->
+            </select>
+            <br><span>Select dataset</span><br>
+            <select name="test" onchange="changeDataSet(this.options[this.options.selectedIndex].value)">
+                <option value="nCoV">nCoV</option>
+                <option value="policy">nCoV policy</option>
+                <option value="ASF">African swine fever</option>
+            </select> 
+        </div>
+    </div>
+    <div class="changeStyle selectBox">
+        <div class="selectTitle">
+            <span>Style</span>
+        </div>
+        <div class="styleTypes">
+            <span>Line</span><br>
+            <select name="test" onchange="changeLineColor(this.options[this.options.selectedIndex].value)">
+                <option value="white">White</option>
+                <option value="rgb(110,110,110)">Gray</option>
+            </select>
+            <br><span>Circle</span><br>
+            <select name="test" onchange="changeCircleColor(this.options[this.options.selectedIndex].value)">
+                <option value="rgb(247,254,174)">Yellow</option>
+                <option value="white">White</option>
+            </select>
+            <br><span>Color Scale</span><br>
+            <select name="test" onchange="changeColorRange(this.options[this.options.selectedIndex].value)">
+                <option value="0">Red Group</option>
+                <!--option value="1">Blue Group</option>
+                <option value="2">Yellow Group</option!-->
+            </select>
+        </div>
+    </div>
+    <div class="uploadData selectBox">
+        <div class="selectTitle">
+            <span>Upload Data</span>
+        </div>
+        <div class="uploadPanel">
+            <div class="detailsText">
+                <span>You can create new maps by uploading your own data.</span><br><br>
+                <span>For details and structures of the data, please check the descriptions.</span><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--div class="box" style="position:absolute;left:0px;top:0px">
+    <div class="content">
+        <span>Line</span><br>
+        <select name="test">
+            <option value="0">White</option>
+            <option value="1">Red</option>
+        </select>
+        <br><span>Circle</span><br>
+        <select name="test">
+            <option value="0">Yellow</option>
+            <option value="1">White</option>
+        </select>
+        <br><span>Color Scale</span><br>
+        <select name="test">
+            <option value="0">Red Group</option>
+            <option value="1">Blue Group</option>
+            <option value="2">Yellow Group</option>
+        </select>
+    </div>
+    <input type="button" class="showButton" value="隐藏">
+<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+    $(".content").show(); // 默认隐藏下拉框
+    //$(":button").click(function() {
+    $(".showButton").click(function() {
+        $(".content").toggle();  // 已经显示则隐藏，隐藏了则显示
+        $(this).val($(this).val()=="显示"?"隐藏":"显示");
+    })
+})
+
+</script>
+</div!-->
+
+<div id="view" style="position:absolute;left:40px;top:200px">
+<script src="d3.v4.min.js"></script>
+<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+<!--script src="mapLibPolicy.js"></script!-->
+<script src="chinaMapSupport.js"></script>
+<script>
+    $(window).resize(function(){
+        //alert("窗体大小改变了！");
+        location.replace(location.href); 
+    });
+</script>
+</div>
+</body>
+ 
+</html>
