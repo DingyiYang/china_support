@@ -1,6 +1,6 @@
 {
 "web_title":
-	"nCoV: Chinese Spread since 2019/12/31",
+	"nCoV: Directional supports",
 "chinese_title":
 	"新型冠状病毒肺炎: 十六省市对口支援湖北",
 "sub_tiltle":
@@ -35,7 +35,7 @@
 	{"year":20200111,"event":"Report of 41 confirmed cases in China","chinese_event":"中国武汉确诊41例新型冠状病毒"},
 	{"year":20200119,"event":"First detected in Beijing, Guangdong","chinese_event":"首次在湖北以外省份确诊"},
 	{"year":20200131,"event":"More than 10000 cases confirmed","chinese_event":"全国确诊人数超10000"},
-	{"year":20200207,"event":"More than 10000 cases confirmed","chinese_event":"建立了16个省支援武汉以外地市的对口支援关系"}],
+	{"year":20200207,"event":"Start directional supports","chinese_event":"建立了16个省支援武汉以外地市的对口支援关系"}],
 "is_date_data":0,
 "is_data2axis":1,
 "show_detail":1,
