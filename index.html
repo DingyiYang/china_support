@@ -39,8 +39,11 @@
             fill:none;
             stroke: #de5e5b;
             stroke-width:2vmin;
-            animation: changes 1s linear infinite;
+            animation: changes 1s  infinite;
             -webkit-animation:changes 1s infinite;
+            -ms-animation: changes 1s infinite;
+            -moz-animation: changes 1s infinite;
+            -o-animation: changes 1s infinite;
          } 
          @keyframes changes {
             from   {stroke-dasharray: 1vmin,1vmin;}
@@ -53,9 +56,20 @@
             to  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
         }
 
-        @-ms-keyframes changes
+        @-ms-keyframes changes{
+            from   {stroke-dasharray: 1vmin,1vmin;}
+            to  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
 
-        @-moz-keyframes changes
+        @-moz-keyframes changes{
+            from   {stroke-dasharray: 1vmin,1vmin;}
+            to  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
+        @-o-keyframes changes{
+            from   {stroke-dasharray: 1vmin,1vmin;}
+            to  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
+
         .title_text{
             font-size: 30;
             fill: #ffffff;
@@ -93,6 +107,70 @@
             width:88vw;
             height:104vw;
         }
+        #dataExplain{
+              position: absolute;
+              width: 87.187vw;
+              height: 160.33vw;
+              left: 6.66667vw;
+              top: 0.144vw;
+              border-radius: 20px;
+              border: solid 1px #979797;
+              background-color: #ffffff;
+        }
+              #dataExplain_title{
+                    position: absolute;
+                  width: 21.333vw;
+                  top: 7.4666vw;
+                  left:32.666666vw;
+                  height:85.3333vw;
+                  font-family: PingFang-SC;
+                  font-size: 40/7.5vw;
+                  font-weight: 500;
+                  font-stretch: normal;
+                  font-style: normal;
+                  line-height: normal;
+                  letter-spacing: normal;
+                  color: #000000;
+              }
+              #content{
+                    position: absolute;
+                    left:7.3333vw;
+                    top:20.93333vw;
+                  width: 72.4vw;
+                  height: 124.933333vw;
+                  font-family: PingFang-SC;
+                  font-size: 4vw;
+                  font-weight: normal;
+                  font-stretch: normal;
+                  font-style: normal;
+                  line-height: normal;
+                  letter-spacing: normal;
+                  color: #666666;
+              }
+              #dataExplain_line{
+                position: absolute;
+                top:142.4vw;
+                width: 99.7%;
+                height: 0.133333333vw;
+                border: solid 1px #979797;
+                fill:#979797;
+              }
+              #dataExplain_close{
+                  position: absolute;
+                  left:38.8vw;
+                  top:150.733333vw;
+                  width: 9.6vw;
+                  height: 6.666666vw;
+                  font-family: PingFang-SC;
+                  font-size: 4.8vw;
+                  font-weight: 500;
+                  font-stretch: normal;
+                  font-style: normal;
+                  line-height: normal;
+                  letter-spacing: normal;
+                  color: #898787;
+                  cursor: pointer;
+              }
 
 
     }
@@ -102,6 +180,18 @@
  
 <body>
 <div id="mapPanel">
+</div>
+<div id="dataExplain" style="display: none;">
+    <div id="dataExplain_title">数据说明</div>
+    <div id="content">国家卫健委和各省卫健委公布数据的时间粒度并不一致。对于国家级的统计数据，我们采用国家卫健委的数据，而对于各省的数据，我们以省级卫健委的公告为准。
+国家卫健委按照每天0-24时来公布每日数据，而各省、市卫健委公布的数据的时间段各不相同，并可能跨越当日24时。
+
+<br><br>我们采取以每日12时为界的方法处理这种情况，将上例3个新增病例划定为1月29日确诊。因此，在我们的统计数据中，会出现某日各省病例数目总和超过全国卫健委公布数目的情况。同样，各省、市卫健委公布数据也存在时间粒度不一致的问题，但这种误差是细微的，对分析疫情整体趋势并无严重影响。
+
+<br><br>对于卫健委通报中的核减病例，由于我们无法明确该病例是何日确诊，因此我们统计的新增数目是卫健委当日公示新增数目减去当日核减数目，以保持累计值与卫健委当日公示累计病例数一致。</div>
+    <p id="dataExplain_line"></p>
+    <div id="dataExplain_close" onclick="hideDataExplain()">关闭</div>
+
 </div>
 <script src="d3.v4.min.js"></script>
 <script type="text/javascript" src="jquery-1.10.2.min.js"></script>

@@ -105,7 +105,7 @@
                         .scale(d3.min([width/4.1,height/2.3])*0.7)
                         .translate([width/2, height/2]);
     let proj_china=d3.geoMercator()
-                        .center([113, 35])
+                        .center([113, 37])
                         .scale(d3.min([width*1.6,height]))
                         .translate([width/2, height/2]);
     let proj_hubei=d3.geoMercator()
@@ -178,7 +178,7 @@ function add_nanhai_svg(nanhai_width){
     .attr("fill","rgb(50,50,50)")
 
   d3.json("nanhai.json",function (error, nanhai_map){
-      console.log(nanhai_map)
+      //console.log(nanhai_map)
       nanhai_svg.selectAll("path")
         .data(nanhai_map.features)
         .enter().append("path")
@@ -836,7 +836,7 @@ function add_nanhai_svg(nanhai_width){
                                 .text("兄弟省市对口支援图")
             var time=svg.append("text")
                                 .attr("x",width*0.0348)
-                                .attr("y",height*0.08)
+                                .attr("y",width*0.09)
                                 .attr("font-size","2.5vmin")
                                 .style("fill","#b2b2b2")
                                 .text("截至 "+(new Date()).toLocaleString()+" 国家卫健委数据统计")
@@ -844,7 +844,7 @@ function add_nanhai_svg(nanhai_width){
             var remark=svg.append("text")
                                 .attr("x",width*0.02)
                                 .attr("y",width*1.1)
-                                .attr("font-size","3vmin")
+                                .attr("font-size","3vw")
                                 .style("fill","#b2b2b2")
                                 .text("*点击地图上的省份查看与湖北地区“一对一”支援关系")
             var title_rect=svg.append("rect")
@@ -856,9 +856,32 @@ function add_nanhai_svg(nanhai_width){
                   .attr("rx",width*0.005)
                   .attr("ry",width*0.005)
                   .attr("fill","#00bad1")
+            svg.append("image")
+                    .attr("xlink:href",function(d,i){
+                        return "icon/dataEcplain.svg"
+                    })
+                    .attr("x",function(d){
+                        return width*0.680303;
+                    })
+                    .attr("y",function(d){
+                        return width*0.058;
+                    })
+                    .attr("width",width*0.04090)
+                    .attr("height",width*0.04090)
+                    .attr("opacity",function(d){
+                        //if(d.icon_loc=="") return 0
+                            return 1
+                    })
+                    .attr("cursor","pointer")
+                    .on("click",function(){
+                        d3.select("#dataExplain").style("display","")
+                    })
         
     }
 //结束绘制，开始各种函数了
+    function hideDataExplain(){
+        d3.select("#dataExplain").style("display","none")
+    }
 
     //判断两个地区是否有关联
     function hasRelation(a,b){
@@ -1137,24 +1160,6 @@ function add_nanhai_svg(nanhai_width){
         d3.selectAll(".support_links")
                 .style("stroke-width",function(d){
                     return 0
-                    if(is_data2axis==0){
-                        return 0
-                            /*let num0=d.properties.main_data[year_0.toString()]
-                            let num1=d.properties.main_data[year_1.toString()]
-                            let brush_num=num1-num0
-                            //console.log(num1-num0)
-                            for(var k=0;k<data_range.length;k++){
-                                if(brush_num<=data_range[k].range[1]&&brush_num>=data_range[k].range[0]) return 2.3
-                            }
-                        return 0*/
-
-                    }
-                    let temp_data=d.main_data
-                    //if(is_date==1) temp_data=countGapDays(start_date,temp_data)
-                    if(temp_data>=year_0&&temp_data<=year_1){
-                        return 2.3
-                    }
-                    else return 0
                 })
 
              d3.selectAll(".click_text_1")
@@ -1653,7 +1658,7 @@ function add_nanhai_svg(nanhai_width){
                             }
                         }
                     }
-                    console.log((chinaMap))
+                    //console.log((chinaMap))
                     //湖北的
                     for(var i=0;i<hubeiMap.features.length;i++){
                         let pre_data=0
@@ -1677,7 +1682,7 @@ function add_nanhai_svg(nanhai_width){
                         }
                     }
                     county_nums=county_nums.sort(compare)
-                    console.log(county_nums)
+                    //console.log(county_nums)
 
                     function compare(num1,num2){
                       return num2 - num1;
