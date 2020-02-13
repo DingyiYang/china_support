@@ -1037,7 +1037,7 @@ function add_nanhai_svg(nanhai_width){
                                 .text("*点击地图上的省份查看与湖北地区“一对一”支援关系")
             var title_rect=svg.append("rect")
                     .attr("x",width*0.04)
-                    .attr("y",height*0.02)
+                    .attr("y",height*0.05-width*0.035)
                   .attr("width","1.2vw")
                   .attr("height","4vw")
                   .style("rx","1vw")
