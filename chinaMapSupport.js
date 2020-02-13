@@ -1712,7 +1712,7 @@ function add_nanhai_svg(nanhai_width){
                         addPath(true)
                         addDistrictName()
                         changeLanChinese()
-                    }, 500);
+                    }, 1000);
                 })
             })
     }
