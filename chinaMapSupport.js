@@ -853,8 +853,8 @@ function add_nanhai_svg(nanhai_width){
                     .attr("y",width*0.003)
                   .attr("width",width*0.01212)
                   .attr("height",width*0.0515)
-                  .attr("rx","0.61vw")
-                  .attr("ry","0.61vw")
+                  .attr("rx",width*0.005)
+                  .attr("ry",width*0.005)
                   .attr("fill","#00bad1")
         
     }
