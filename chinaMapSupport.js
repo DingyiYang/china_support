@@ -1,21 +1,15 @@
 //开始进行数据定义
     let self=this
 
-    /*let data_keys=["main_data","cure_data","death_data"]
-    let data_key_chinese=["确诊","治愈","死亡"]
-    let data_key_eng=["case","cured","dead"]*/
     let data_keys=["main_data"]
     let data_key_chinese=["确诊"]
     let data_key_eng=["cases"]
 
-    /*let overview_chinese=["国家","确诊"]
-    let overview_eng=["Countries","Confirmed"]*/
     let overview_chinese=["省份","确诊"]
     let overview_eng=["Provinces","Confirmed"]
 
     var brush_flag=0;
     let inTimeRect=0;
-    let play_flag=0;//表示是否正在播放
     let isEnd=1;
     let inline=0;
     let incircle=0;
@@ -56,21 +50,7 @@
     let county_confirm_num={}
     let county_order={}
     let county_id={}
-   
-    /*data_range=[{"name":"1909-1956","id":0,"range":[1909,1956]},
-                {"name":"1957-1977","id":1,"range":[1957,1977]},
-                {"name":"1978-1995","id":2,"range":[1978,1995]},
-                {"name":"1996-2009","id":3,"range":[1996,2009]},
-                {"name":"2010-2019","id":4,"range":[2010,2019]}]
-    //关键事件的数据
-    data_point=[{"year":1909,"event":"First detected in Kenya","chinese_event":"首次在肯尼亚发现"},
-                {"year":1957,"event":"Introduced into Europe","chinese_event":"传播到欧洲"},
-                {"year":1978,"event":"Spread to South America, ","chinese_event":"蔓延到南美,"},
-                {"year":1978,"event":"line2:Central Africa  ","chinese_event":"line2:中非"},
-                {"year":1996,"event":"Outbreak in Ivory Coast","chinese_event":"在科特迪瓦以及"},
-                {"year":1996,"event":"line2:and countries nearby","chinese_event":"line2:周围国家爆发"},
-                {"year":2007,"event":"Spread to Caucasus","chinese_event":"传播到高加索地区"},
-                {"year":2018,"event":"Occurred in China","chinese_event":"在中国爆发"}]*/
+
     //地图绘制的数据 
     let map_data={}
     //地图绑定的信息的数据
@@ -89,41 +69,21 @@
     let font_scale=1
     let temp_lan="english"
     let temp_map="world"
-    /*var width = document.body.clientWidth; 
-    var height = document.body.clientHeight;*/
-    //var width = Math.min(window.innerWidth,document.body.clientWidth); 
-    //var height = Math.min(window.innerHeight,document.body.clientHeight);
+
     //宽度
     let width=$('#mapPanel').width()
     //高度
     let height=$('#mapPanel').height()
-    //font_scale=Math.min(height/screen.height,width/screen.width)*1.2
-    font_scale=Math.min(height,width)*0.0017
+    //font_scale=Math.min(screen.height,screen.width)/750
+    font_scale=Math.min(height,width)*0.0025
     let svg_x=0
     let svg_y=0
-    //console.log("width="+width)
-    //console.log("height="+height)
-    /*if(height*0.9>width*screen_scale2){
-        svg_y=(height*0.9-width*screen_scale2)/2
-        height=width*screen_scale2
-        font_scale=Math.min(height,width)*0.0017
-    }
-    else if(width>height/screen_scale){
-        svg_x=(width-height/screen_scale)/2
-        width=height/screen_scale
-        font_scale=Math.min(height,width)*0.0017
-    }*/
-    //console.log(width)
-    //console.log(height)
 
     var color=d3.scaleLinear()
         .domain([0, 4])
         .range(["rgba(240,140,131,0.8)","rgba(187,0,0,0.9)" ])
         .interpolate(d3.interpolateHcl);
-    /*var color = d3.scaleLinear()
-        .domain([0, 4])
-        .range(["rgb(253,215,108)","rgb(252,200,44)"])
-        .interpolate(d3.interpolateHcl);*/
+
     var bascolor=["rgb(238,238,238)","rgb(111,213,201)","rgb(255,176,93)","rgb(255,119,105)","rgb(165,200,233)","rgb(244,172,88)"];
 
     let svg=d3.select("#mapPanel").append("svg")
@@ -136,20 +96,17 @@
     let map_x=d3.max([width*0.95-map_width,width*0.28])
     let map_y=(height-map_height)/2
 
-    let map_svg=svg
-        //.attr("transform", "translate(0,0)");
- 
+    let map_svg=svg 
 
     var tooltip = d3.select("#tooltip");
  
     let proj_world=d3.geoMercator()
-                        //.center([0, 16])
                         .center([0, 23])
                         .scale(d3.min([width/4.1,height/2.3])*0.7)
                         .translate([width/2, height/2]);
     let proj_china=d3.geoMercator()
                         .center([113, 35])
-                        .scale(d3.min([width*1.5,height]))
+                        .scale(d3.min([width*1.6,height]))
                         .translate([width/2, height/2]);
     let proj_hubei=d3.geoMercator()
                         .center([112.2363,31.1572])
@@ -168,9 +125,8 @@
     //如果数据是日期型数据的话，需要初始日期结合
     let start_date
     let stop_year=1909;//表示暂停时所处的年份
-            timelineLen=height*0.25;//时间轴长度
-    //timelineX=width*0.12
-    //timelineX=width*0.03
+    timelineLen=height*0.25;//时间轴长度
+
     timelineX=proj_world([-170,0])[0]
             //timelineY=height*0.085
     timelineY=height*0.68
@@ -187,7 +143,7 @@
 function add_nanhai_svg(nanhai_width){
   nanhai_height = nanhai_width * 1.2
   let nanhai_svg = map_svg.append("g")
-                .attr('transform', 'translate(' + proj_china([125.5,28])[0] + ',' + proj_china([110,20])[1] + ')')
+                .attr('transform', 'translate(' + proj_china([125.5,28])[0] + ',' + proj_china([110,24])[1] + ')')
   let min_edge = nanhai_width 
   center_location = [124.4, 13.2]
   nanhai_svg.append("rect")
@@ -217,7 +173,7 @@ function add_nanhai_svg(nanhai_width){
     .attr("y", nanhai_height * 0.95)
     .attr("text-anchor", "end")
     .text('中国南海')
-    .attr("font-size", nanhai_width/10)
+    .attr("font-size", nanhai_width*0.15)
     .attr("font-family","PingFang-SC")
     .attr("fill","rgb(50,50,50)")
 
@@ -247,16 +203,12 @@ function add_nanhai_svg(nanhai_width){
     })
 }
 //获取数据
-    //changeView(temp_map+"_"+"nCoV"+".json","path_"+"nCoV"+".json",temp_map+"_web_info_"+"nCoV"+".json")
-    //selected_dataset="support"
-    //changeView(temp_map+"_"+"support"+".json","",temp_map+"_web_info_"+"support"+".json")
-    //HideLeftView()
+
     temp_map="china"
     selected_dataset="support"
     changeView(temp_map+"_"+"support"+".json","path_china_nCoV.json",temp_map+"_web_info_"+"support"+".json")
 
 
-//获取数据的函数
 
     //基础地图数据获取
     function getMapData(fileName){
@@ -264,8 +216,6 @@ function add_nanhai_svg(nanhai_width){
             //基础地图数据的赋值
             map_data=cn
 
-            //var parseDate = d3.timeFormat("%Y.%m.%d").parse;
-            //添加用于用于刷选的时间轴
             })
     }
 
@@ -364,13 +314,6 @@ function add_nanhai_svg(nanhai_width){
             map_svg.selectAll(".state").remove()
             //svg.selectAll(".states").remove()
             }
-            /*d3.selectAll(".country_text")
-                .attr("opacity",function(d){if(d.properties.chinese_name=="湖北") return 0})
-            d3.selectAll(".country_num_text")
-                .style("opacity",function(d){if(d.properties.chinese_name=="湖北") return 0})
-            d3.selectAll(".country_num_text_shadow")
-                .style("opacity",function(d){if(d.properties.chinese_name=="湖北") return 0})*/
-            //绘制国家
 
             map_svg.append("g").attr("class","state").selectAll("path")
                     .data(map_data.features)
@@ -404,27 +347,13 @@ function add_nanhai_svg(nanhai_width){
                     .style("stroke-width",function(d){
                         if(d.properties.chinese_name=="湖北") return 5*font_scale
                     })
-                    /*.on("click", function (d) {
-                        //console.log(d.properties.name)
-                        if(d.properties.hasData==1){
-                            Showmessage(d);
-                        }
-                    })
-                    .on("mouseout", function (d) {
-                        if(d.properties.hasData==1){
-                            //console.log("outmap")
-                            setTimeout(function(){
-                                Regainmessage();
-                            },300)
-                        }
-                        tooltip.style("display", "none");
-                    });*/
+
             svg.append("rect")
                 .attr("class","return_rect")
-                .attr("width",width*0.2)
-                .attr("height",width*0.05)
+                .attr("width",width*0.2924)
+                .attr("height",width*0.1075)
                 .attr("x",width*0.03)
-                .attr("y",height*0.85)
+                .attr("y",width*0.95)
                 .attr("rx",width*0.01)
                 .attr("ry",width*0.01)
                 .attr("fill","#e7e9ed")
@@ -435,11 +364,11 @@ function add_nanhai_svg(nanhai_width){
                 .attr("opacity",0)
             svg.append("text")
                 .attr("class","return_text")
-                .attr("x",width*0.13)
-                .attr("y",height*0.85+19*font_scale)
+                .attr("x",width*0.03+width*0.2924/2)
+                .attr("y",width*1.017)
                 .text("返回全国地图")
                 .attr("fill","#333333")
-                .attr("font-size",15*font_scale)
+                .attr("font-size",24/7.5+"vw")
                 .on("click",function(){
                     Regainmessage()
                 })
@@ -447,7 +376,7 @@ function add_nanhai_svg(nanhai_width){
                 .attr("font-family","PingFang-SC")
                 .style("cursor","pointer")
                 .attr("opacity",0)
-            add_nanhai_svg(d3.min([width*0.1,height*0.1]))
+            add_nanhai_svg(d3.min([width*0.13,height*0.13]))
     }
 
     //添加区域的名字
@@ -605,23 +534,7 @@ function add_nanhai_svg(nanhai_width){
                     .on("mouseout",function(d){
                         if(isregain==0) Regainmessage()
                     })
-                /*.on("click", function (d) {
-                        //console.log(d.properties.name)
-                        if(d.properties.hasData==1){
-                            intext=1
-                            Showmessage(d);
-                        }
-                        //tooltip.style("display", null);
 
-                    })
-                .on("mouseout", function (d) {
-                        if(d.properties.hasData==1){
-                            intext=0
-                            setTimeout(function(){
-                                if(intext==0&&inmap==0) Regainmessage();
-                            },300)
-                        }
-                */
                 .attr("font-size", function(d,i){
                     if(d.properties.main_data==1996) return 8*font_scale
                         else if(d.properties.cp[0]<25.5&&d.properties.cp[0]>18&&d.properties.cp[1]<50&&d.properties.cp[1]>40){
@@ -679,24 +592,6 @@ function add_nanhai_svg(nanhai_width){
                 .on("mouseout",function(d){
                         if(isregain==0) Regainmessage()
                     })
-                /*.on("click", function (d) {
-                        //console.log(d.properties.name)
-                        if(d.properties.hasData==1){
-                            intext=1
-                            Showmessage(d);
-                        }
-                        //tooltip.style("display", null);
-
-                    })
-                    .on("mouseout", function (d) {
-                        intext=0
-                        if(d.properties.hasData==1){
-                            setTimeout(function(){
-                                if(intext==0&&inmap==0) Regainmessage();
-                            },300)
-                        }
-                        //tooltip.style("display", "none");
-                    })*/
                 .attr("font-size", function(d,i){
                     if(d.properties.main_data==1996) return 8*font_scale
                         else if(d.properties.cp[0]<25.5&&d.properties.cp[0]>18&&d.properties.cp[1]<50&&d.properties.cp[1]>40){
@@ -746,13 +641,7 @@ function add_nanhai_svg(nanhai_width){
                     if(temp_lan=="chinese"||(d.properties.chinese_name.split(" ").length==1)) return local[1]+18*font_scale;
                     else return local[1]+28*font_scale;
                 }
-                })
-                /*.attr("click",function(){
-                    intext=1
-                })
-                .attr("mouseout",function(){
-                    intext=0
-                })*/               
+                })              
                     .on("click",function(d){
                         //if(d.properties.chinese_name=="湖北") getMapDataAll()
                             Showmessage(d)
@@ -793,87 +682,10 @@ function add_nanhai_svg(nanhai_width){
                 .style("fill-opacity",.0)
     }
 
-    //添加时间轴/范围轴 以及 关键事件
-    function addAxis(){
-
-            let tAxis = d3.axisRight(tScale)
-                .ticks(0)
-                .tickSizeOuter(0)
-                //.tickValues()
-                .tickFormat(function(v) { // 格式化刻度值
-                    return ""
-                        //if(v==0) return v;
-                        //if(v==1900||v==1950||v==2000) return v;
-                 });
-
-
-            svg.select(".axis").remove()
-            var time_axis=svg.append("g")
-                    .attr("class","axis")
-                    .attr("transform","translate(" +(timelineX+width*0.03) + "," +(timelineY) + ")")
-                    .call(tAxis);
-            //关键事件
-            svg.selectAll(".point_text").remove()
-            var point_text=svg.selectAll(".point_text")
-                    .data(data_point)
-                    .enter()
-                    .append("text")
-                    .attr("class","point_text")
-                    .attr("font-size",10*font_scale)
-                    .attr("x",function(d,i){
-                        if (d.event.split(":").length==2) return timelineX+width*0.03+width*0.045;
-                        return timelineX+width*0.03+width*0.022;
-                     })
-                    .attr("y",function(d,i){
-                        let temp_data=d.year
-                        if(is_date==1||is_data2axis==0||use_date_axis==1) temp_data=countGapDays(start_date,temp_data)
-                        if (d.event.split(":").length==2) return timelineY+tScale(temp_data)+height*0.007*3
-                        else return timelineY+tScale(temp_data)+height*0.007
-                    })
-                    .text(function(d,i){
-                        if (d.event.split(":").length==2) return d.event.split(":")[1]
-                        return date2str(d.year)+num_unit+": "+d.event;
-                    })
-                    //.attr("fill","white")
-                    .style("fill-opacity",.9);
-            d3.selectAll(".point_line").remove()
-            var line=svg.selectAll(".point_line")
-                .data(data_point)
-                .enter()
-                .append("path")
-                .attr("class","point_line")
-                .attr("d",function(d,i){
-                    let temp_data=d.year
-                    if(is_date==1||is_data2axis==0||use_date_axis==1) temp_data=countGapDays(start_date,temp_data)
-                    return "M"+(timelineX+width*0.03)+","+(timelineY+tScale(temp_data))
-                        +" L"+(timelineX+width*0.03+width*0.02)+","+(timelineY+tScale(temp_data))
-
-                })
-                .attr("stroke","rgba(160,160,160,0.7)")
-                .attr("stroke-dasharray","3,3")
-            //刷选框
-                d3.selectAll(".brush").remove()
-                d3.selectAll(".slide_rect").remove()
-            if(use_brush==1){
-                let brush=d3.brushY()
-                    .extent([[timelineX+width*0.03-width/60, timelineY], [timelineX, timelineY+timelineLen]])
-                    .on("brush end", display);
-                svg.select(".brush").remove()
-                svg.append("g")
-                    .attr("class", "brush")
-                    .call(brush)
-                    .call(brush.move, [timelineY,timelineY+timelineLen]);
-            }
-            
-            if(use_dragBlock==1){
-                addDragBlock()
-            }
-    }
-
     //添加连线和circle
     function addPath(hasPath){
         if(hasPath==false){
-            d3.selectAll(".links").remove()
+            d3.selectAll(".support_links").remove()
             d3.selectAll(".mycircle").remove()
             return
         }
@@ -930,12 +742,12 @@ function add_nanhai_svg(nanhai_width){
             feMerge.append("feMergeNode")
                 .attr("in", "SourceGraphic");
 
-            d3.selectAll(".links").remove()
-            var country_link=map_svg.selectAll(".links")
+            d3.selectAll(".support_links").remove()
+            var country_link=map_svg.selectAll(".support_links")
                     .data(path_data)
                     .enter()
                     .append("path")
-                    .attr("class","links")
+                    .attr("class","support_links")
                     .attr("d", function(d){
                         if(d.source.name=="Russia"||d.target.name=="Tanzania") return link_2(d)
                         if(d.source.name=="Angola") return link_3(d)
@@ -1018,12 +830,12 @@ function add_nanhai_svg(nanhai_width){
             d3.selectAll(".title").remove()  
             var title=svg.append("text")
                                 .attr("class","title")
-                                .attr("x",width*0.06)
-                                .attr("y",height*0.05)
-                                .attr("font-size","4vmin")
+                                .attr("x",width*0.0348)
+                                .attr("y",width*0.05)
+                                .attr("font-size",40/7.5+"vw")
                                 .text("兄弟省市对口支援图")
             var time=svg.append("text")
-                                .attr("x",width*0.06)
+                                .attr("x",width*0.0348)
                                 .attr("y",height*0.08)
                                 .attr("font-size","2.5vmin")
                                 .style("fill","#b2b2b2")
@@ -1031,145 +843,22 @@ function add_nanhai_svg(nanhai_width){
 
             var remark=svg.append("text")
                                 .attr("x",width*0.02)
-                                .attr("y",proj_china([120,12])[1])
+                                .attr("y",width*1.1)
                                 .attr("font-size","3vmin")
                                 .style("fill","#b2b2b2")
                                 .text("*点击地图上的省份查看与湖北地区“一对一”支援关系")
             var title_rect=svg.append("rect")
-                    .attr("x",width*0.04)
-                    .attr("y",height*0.05-width*0.035)
-                  .attr("width","1.2vw")
-                  .attr("height","4vw")
-                  .style("rx","1vw")
-                  .style("ry","1vw")
+                .attr("class","title_rect")
+                    .attr("x",0)
+                    .attr("y",width*0.003)
+                  .attr("width",width*0.01212)
+                  .attr("height",width*0.0515)
+                  .attr("rx","0.61vw")
+                  .attr("ry","0.61vw")
                   .attr("fill","#00bad1")
         
     }
 //结束绘制，开始各种函数了
-    
-    //高亮
-    function Highlight(temp_range){
-            d3.selectAll(".country_num_text")
-                .attr("opacity",0)
-            //改变国家的颜色显示
-            d3.select(".state")
-                .selectAll("path")
-                .attr("fill",function(d){
-                    //console.log(d)
-                    //console.log(2333)
-
-                if(d.properties.hasData==1){
-                    if(use_dragBlock==1){
-                            let num0=0
-                            let num1=d.properties.main_data[temp_time.toString()]
-                            let brush_num=num1-num0
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                            //console.log(num1-num0)
-                            if(brush_num<=temp_range.range[1]&&brush_num>=temp_range.range[0]) return color(temp_range.id)
-                            else return "rgb(255,255,255)"
-                    }
-                    else if(d.properties.stage==temp_range.id) return color(d.properties.stage)
-                }
-                else{
-                    return "rgb(255,255,255)"
-                }
-                    
-                });
-            //改变连线的显示
-            d3.selectAll(".links")
-                .style("stroke-width",function(d,i){
-                    //console.log(d)
-                    if(d.stage==temp_range.id){
-                        return 2*font_scale;
-                    }
-                    else{
-                        return 0
-                    }
-                })
-                .style("fill",function(d){
-                if(d.source.name=="Portugal"&&d.stage==temp_range.id) return "black"
-
-             })
-                .style("opacity",function(){
-                    return 1
-                 });
-            d3.selectAll(".country_num_text")
-                .attr("opacity",function(d,i){
-                    if(use_dragBlock==1){
-                            let num0=0
-                            let num1=d.properties.main_data[temp_time.toString()]
-                            let brush_num=num1-num0
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                            //console.log(num1-num0)
-                            if(brush_num<=temp_range.range[1]&&brush_num>=temp_range.range[0]) return 1
-                            else return 0
-                    }
-                    else return 0
-                })
-            //改变国家名字的显示
-            d3.selectAll(".country_text")
-                .text(function(d){
-                    if(d.properties.stage==temp_range.id) return d.properties.chinese_name
-                })
-                .style("fill-opacity",function(d,i){
-                    if(use_dragBlock==1){
-                            let num0=0
-                            let num1=d.properties.main_data[temp_time.toString()]
-                            let brush_num=num1-num0
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                            //console.log(num1-num0)
-                            if(brush_num<=temp_range.range[1]&&brush_num>=temp_range.range[0]) return 
-                            else return 0.2
-                    }
-                    else if(d.properties.stage==temp_range.id){
-                        return 
-                    }
-                    else{
-                        return 0.2
-                    }
-                })
-            d3.selectAll(".country_text2")
-                .style("fill-opacity",function(d,i){
-                    if(use_dragBlock==1){
-                            let num0=0
-                            let num1=d.properties.main_data[temp_time.toString()]
-                            let brush_num=num1-num0
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                            //console.log(num1-num0)
-                            if(brush_num<=temp_range.range[1]&&brush_num>=temp_range.range[0]) return 
-                            else return 0.2
-                    }
-                    else if(d.properties.stage==temp_range.id){
-                        return 
-                    }
-                    else{
-                        return 0.2
-                    }
-                })
-            //改变传播地的圆圈的透明度
-           d3.selectAll(".mycircle")
-            .attr("r",function(d,i){
-                if(d.stage==temp_range.id){
-                        return 10*font_scale
-                    }
-                    else{
-                        return 0.1
-                    }
-            })
-            .style("fill-opacity",function(d,i){
-                if(d.stage==temp_range.id) return 0.8
-                    else return 0.1
-            })
-            .style("opacity",function(){
-                    return 1
-                 });
-        }
-
-        //恢复
-        function Regain(temp_range){
-            change_to_timerange(axis_start,temp_time)
-            return true
-        }
 
     //判断两个地区是否有关联
     function hasRelation(a,b){
@@ -1211,7 +900,7 @@ function add_nanhai_svg(nanhai_width){
                 .style("fill-opacity",function(d){
                     return .9
                 })
-            d3.selectAll(".links")
+            d3.selectAll(".support_links")
                 .style("stroke-width",function(d){
                         return 
                 })
@@ -1450,7 +1139,7 @@ function add_nanhai_svg(nanhai_width){
             .attr("opacity",1)
         if(hasPath==0) return true
 
-        d3.selectAll(".links")
+        d3.selectAll(".support_links")
                 .style("stroke-width",function(d){
                     return 0
                     if(is_data2axis==0){
@@ -1517,14 +1206,6 @@ function add_nanhai_svg(nanhai_width){
                 .style("fill-opacity",function(d,i){
                     if(is_data2axis==0){
                         return 0
-                            /*let num0=d.properties.main_data[year_0.toString()]
-                            let num1=d.properties.main_data[year_1.toString()]
-                            let brush_num=num1-num0
-                            //console.log(num1-num0)
-                            for(var k=0;k<data_range.length;k++){
-                                if(brush_num<=data_range[k].range[1]&&brush_num>=data_range[k].range[0]) return 6*font_scale
-                            }
-                        return 0*/
 
                     }
                     let temp_data=d.main_data
@@ -1765,7 +1446,7 @@ function add_nanhai_svg(nanhai_width){
 
 
         //改变连线的显示
-        d3.selectAll(".links")
+        d3.selectAll(".support_links")
             .attr("d", function(d){
                         if(d.source.name=="Russia"||d.target.name=="Tanzania") return link_2(d)
                         if(d.source.name=="Angola") return link_3(d)
@@ -1792,7 +1473,7 @@ function add_nanhai_svg(nanhai_width){
                 return 1
             })
             //改变图片的透明度
-            let img_w=d3.min([width*0.04,height*0.04])
+            let img_w=d3.min([width*0.054,height*0.054])
             let img_h=img_w/36*50
             d3.selectAll(".sourceimg")
                     
@@ -1851,207 +1532,6 @@ function add_nanhai_svg(nanhai_width){
 
     }
 
-
-    //播放动画
-    function show_process(start,end){
-        //console.log(is_data2axis)
-        let duration_time=0
-        let animation_t=d3.timer(function(){
-            d3.selectAll(".button_stop").attr("fill-opacity",1);
-            if(change_view==1||parseInt(start) > end){//结束播放
-                //console.log(start)
-                console.log("end")
-                isEnd=1;
-                d3.selectAll(".button_rect")
-                        .attr("fill-opacity",1)
-                d3.selectAll(".button_stop").attr("fill-opacity",0);
-                animation_t.stop();
-
-                return true; 
-            }
-            if(show_detail==1){
-                d3.selectAll(".country_num_text")
-                    .transition()
-                    .duration(duration_time)
-                    .text(function(d){
-                        if(is_data2axis==0){
-                            let t_name=d.properties.chinese_name
-                            if(t_name.length>2&&t_name!="内蒙古"&&t_name!="黑龙江") return ""
-                            let brush_num=d.properties.main_data[parseInt(start).toString()]
-                            if(isNaN(brush_num)||brush_num==0) return ""
-                                else return brush_num
-                        }
-                    })
-                
-            }
-            //移动滑块，改变国家数量
-            if(use_dragBlock==1){
-                d3.selectAll(".slide_rect")
-                .attr("y",function(d,i){
-                    return timelineY+timelineLen*countGapDays(axis_start,start)/countGapDays(axis_start,axis_end)-8*font_scale
-                })
-                d3.selectAll(".overview_country")
-                    .text(function(){
-                                    let t_country=0
-                                    if(map_data.overview.hasOwnProperty(parseInt(start).toString())!=false) t_country=map_data.overview[parseInt(start).toString()].country_num
-                                    if(temp_lan=="english") return overview_eng[0]+": "+t_country
-                                        else return overview_chinese[0]+": "+t_country
-                                })
-                d3.selectAll(".overview_num")
-                    .text(function(){
-                                    let t_num=0
-                                    if(map_data.overview.hasOwnProperty(parseInt(start).toString())!=false) t_num=map_data.overview[parseInt(start).toString()].data_sum
-                                    if(temp_lan=="english") return overview_eng[1]+": "+t_num
-                                        else return overview_chinese[1]+": "+t_num
-                                })
-             }
-
-            d3.select(".state")
-                .selectAll("path")
-                .transition()
-                .duration(duration_time)
-                .attr("fill",function(d,i){
-                    if(d.properties.hasData==1){
-                            if(is_data2axis==0){
-                                let brush_num=d.properties.main_data[parseInt(start).toString()]
-                                //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                                for(var k=0;k<data_range.length;k++){
-                                    if(brush_num<=data_range[k].range[1]&&brush_num>=data_range[k].range[0]) return color(k)
-                                }
-                                return 
-                            }
-                            if(d.properties.main_data.length==5){
-                                temp_year=parseInt(d.properties.main_data.substr(0,4))
-                                if(temp_year<start){
-                                return color(d.properties.stage)
-                            }}
-                            if(d.properties.main_data<start){
-                                return color(d.properties.stage)
-                            }
-                            else{
-                                return "rgb(255,255,255)"
-                            }
-                        }
-                        }); 
-            //改变文字
-            d3.selectAll(".country_text")
-                .transition()
-                .duration(duration_time)
-                .style("opacity",function(d){
-                    if(is_data2axis==0){
-                         let brush_num=d.properties.main_data[parseInt(start).toString()]
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                         if (brush_num>0) return 1
-                            else return 0
-                    }
-                    else if(d.properties.main_data.length==5){
-                                temp_year=parseInt(d.properties.main_data.substr(0,4))
-                                if(temp_year<start){
-                                return 1
-                            }}
-                    if(d.properties.main_data<start) return 1
-                    else return 0
-                });
-            d3.selectAll(".country_text2")
-                .transition()
-                .duration(duration_time)
-                .style("fill-opacity",function(d){
-                    if(is_data2axis==0){
-                         let brush_num=d.properties.main_data[parseInt(start).toString()]
-                            //if(d.properties.chinese_name=="中国") console.log(num1-num0)
-                         if (brush_num>0) return 1
-                            else return 0
-                    }
-                    else if(d.properties.main_data<start) return 1
-                    else return 0
-                })
-            d3.selectAll(".mycircle")
-                .transition()
-                .duration(duration_time)
-                .attr("r",function(d,i){
-                    if(d.main_data<start){
-                            return 6*font_scale
-                    }
-                    else{
-                        return 0
-                    }
-                })
-                .attr("fill-opacity",function(d,i){
-                    if(d.main_data<start) return 1
-                        else return 0
-                })
-        //改变连线的显示
-        d3.selectAll(".links")
-            .transition()
-            .duration(duration_time)
-            .style("fill",function(d){
-                if(d.source.name=="Portugal"){
-                    if(d.main_data<=start) return "black"
-                }
-            })
-            .style("stroke-width",function(d,i){
-                //console.log(d)
-                if(d.main_data==parseInt(start)){
-                    return 2.5;
-                }
-                else if(d.main_data<start){
-                    return 2
-                }
-                else{
-                    return 0
-                }
-            })
-            .style("opacity",function(d){
-                if(d.main_data==parseInt(start)){
-                    return 1;
-                }
-                else if(d.main_data<start){
-                    //console.log(d.main_data)
-                    return 1
-                }
-                else{
-                    return 0
-                }
-            })
-
-        d3.selectAll(".range_text")
-            .text(date2str(axis_start)+"-"+date2str(parseInt(start)))
-            //.style("fill","white")
-            .style("opacity",1)
-        let gap_num=axis_end-axis_start
-            if(play_flag==0){
-                d3.selectAll(".button_stop").attr("fill-opacity",0);
-                start+=0
-            }
-            else if(is_data2axis==0){
-                if(start<20200110){
-                    start=start+0.2
-                    if(start+0.2>parseInt(start)+1){
-                    start=parseInt(countDate(parseInt(start),1).replaceAll("/",""))
-                }
-                }
-                else start=start+0.05
-                if(start+0.05>parseInt(start)+1){
-                    start=parseInt(countDate(parseInt(start),1).replaceAll("/",""))
-                }
-            }
-            /*else if(start<1920) start=start+0.1
-            else if(start<1956) start+=3
-            else if(start<1978) start+=0.1
-            else if(start<1996) start+=0.03
-            else if(start<2004) start+=0.1
-            else start+=0.03*/
-            else if(start<axis_start+gap_num*0.1){
-                start=start+0.1
-            }
-            else if(start<axis_start+gap_num*0.3) start+=3
-            else if(start<axis_start+gap_num*0.4) start+=0.1
-            else if(start<axis_start+gap_num*0.6) start+=0.03
-            else if(start<axis_start+gap_num*0.8) start+=0.1
-            else start+=0.03       
-        });
-    }
-
     String.prototype.replaceAll = function(s1, s2) {
         return this.replace(new RegExp(s1, "gm"), s2);
     }
@@ -2101,49 +1581,6 @@ function add_nanhai_svg(nanhai_width){
       + " " + (local2[0]) + "," + (local2[1]-28*pm_y);
     }
 
-    function HideLeftView(){
-        d3.select("#mapPanel").style("left","0%")
-        document.getElementById("LeftSelectPanel").style.display="none"
-        document.getElementById("hide_img").style.display="none"
-        document.getElementById("show_img").style.display=""
-    }
-    function ShowLeftView(){
-        d3.select("#mapPanel").style("left","15%")
-        document.getElementById("LeftSelectPanel").style.display=""
-        document.getElementById("hide_img").style.display=""
-        document.getElementById("show_img").style.display="none"
-    }
-
-    //改变基础地图
-    function changeBasicMap(mapFileName){
-        play_flag=0
-        /*change_view=1
-        show_process(axis_start,axis_end)
-        change_view=0*/
-        selected_map=mapFileName
-        temp_map=mapFileName
-        if(selected_dataset=="nCoV"||selected_dataset=="ASF"){
-            changeView(temp_map+"_"+selected_dataset+".json","path_"+selected_dataset+".json",temp_map+"_web_info_"+selected_dataset+".json")
-        }
-        else{
-            changeView(temp_map+"_"+selected_dataset+".json","",temp_map+"_web_info_"+selected_dataset+".json")
-        }
-    }
-
-    function changeDataSet(datasetName){
-        play_flag=0
-        /*change_view=1
-        show_process(axis_start,axis_end)
-        change_view=0*/
-        selected_dataset=datasetName
-        if(selected_dataset=="nCoV"||selected_dataset=="ASF"){
-            changeView(temp_map+"_"+selected_dataset+".json","path_"+selected_dataset+".json",temp_map+"_web_info_"+selected_dataset+".json")
-        }
-        else{
-            changeView(temp_map+"_"+selected_dataset+".json","",temp_map+"_web_info_"+selected_dataset+".json")
-        }
-
-    }
 
 
     //将中文格式的日期转换
@@ -2182,22 +1619,7 @@ function add_nanhai_svg(nanhai_width){
                 }
                 
             getMapNum()
-            //getHubeiNum()
-            /*setTimeout(function(){ 
-                addMap()
-                addMapStatistic()
-                addRangeRect()
-                addOtherInfo()
-                if(selected_dataset=="support")
-                    addPlayButton(false)
-                else
-                    addPlayButton(true)
-                addAxis() 
-                if(pathDataFile!="") addPath(true)
-                    else addPath(false)
-                addDistrictName()
-            changeLanChinese()
-            }, timeout);*/
+
 
     }
 
@@ -2208,56 +1630,6 @@ function add_nanhai_svg(nanhai_width){
         d3.json("chinamap/china_countries_bilingual.json",function(temp_map_data){
                 //console.log(data)
                 chinaMap=temp_map_data
-                /*d3.csv("https://tanshaocong.github.io/2019-nCoV/data.csv",function(data){
-                //console.log(data)
-                    chinaData=data
-                    let province_num=0
-                    //中国的数据范围
-                    let china_data_range=[1,50,100,500,1000,2000,30000]
-                    let pre_num=0
-                    let temp_dates=Object.keys(chinaData[0])
-                    let update_day=parseInt(temp_dates[temp_dates.length-1].split("月")[1].split("日")[0])
-                    for(var i=0;i<chinaMap.features.length;i++){
-                        temp_province=chinaMap.features[i]
-                        chinaMap["features"][i]["properties"]["main_data"]={}
-                        pre_num=0
-                        for(var j=0;j<chinaData.length;j++){
-                            if(chinaData[j].time==temp_province.properties.chinese_name){
-                                //console.log(chinaData[j])
-                                let t_data=chinaData[j]
-                                for(var key in t_data){
-                                    if(key=="time") continue
-                                    if(t_data[key]!="")
-                                        pre_num=pre_num+parseInt(t_data[key])
-                                    chinaMap["features"][i]["properties"]["main_data"][date_chinese2eng(key)]=pre_num
-                                    for(var k=0;k<china_data_range.length-1;k++){
-                                        if(pre_num>=china_data_range[k] && pre_num<china_data_range[k+1]){
-                                            chinaMap["features"][i]["properties"]["stage"]=k
-                                            break
-                                        }
-                                    }
-                                    if(temp_province.properties.chinese_name=="湖北"){
-                                        chinaMap["features"][i]["properties"]["main_data"][date_chinese2eng(key)]=0
-                                    }
-                                }
-                                continue
-                            }
-                        }
-                    }
-                    //将各省份的数据加到map_data中,将各省份的数据加到全局信息中
-                    for(var i=0;i<chinaMap.features.length;i++){
-                        for(var j=0;j<map_data.features.length;j++){
-                            if(chinaMap.features[i].properties.chinese_name==map_data.features[j].properties.chinese_name){
-                                map_data["features"][j]["properties"]["main_data"]=chinaMap.features[i].properties.main_data[date_chinese2eng(temp_dates[temp_dates.length-1])]
-                                province_confirm_num[chinaMap.features[i].properties.chinese_name]=chinaMap.features[i].properties.main_data[date_chinese2eng(temp_dates[temp_dates.length-1])]
-                                break
-                            }
-                        }
-                    }
-                    //
-                   //console.log(province_confirm_num)
-
-                })*/
                 getHubeiNum(chinaMap)
             })
     }
@@ -2398,59 +1770,15 @@ function add_nanhai_svg(nanhai_width){
                         addPath(true)
                         addDistrictName()
                         changeLanChinese()
-                    }, 1000);
+                    }, 500);
                 })
             })
     }
 
-    //改变地图关联的数据
-    function changeMapData(dataFileName){
-
-    }
-
-    //改变连线关联的数据
-    function changePathData(pathFileName){
-
-    }
-
-    //改变连线颜色的函数
-    function changeLineColor(lineColorValue){
-        //let tempLineColor="black"
-        //if(lineColorValue==0) tempLineColor="yellow"
-            //console.log("tempLineColor"+tempLineColor)
-        var arrowMarker = d3.select("#arrow")
-                        
-        arrowMarker.select("path")
-            .attr("fill",lineColorValue)
-            .attr("fill-opacity",0.7);
-        d3.selectAll(".links")
-                .style("stroke-width",function(d){
-                        return 
-                })
-                .style("fill",function(d){
-                if(d.source.name=="Portugal"){
-                    return "black"
-                }
-                })
-                .style("stroke",lineColorValue)
-                .attr("stroke-opacity",0.7)
-                .attr("marker-end","url(#arrow)")
-    }
-    //改变圆圈的颜色
-    function changeCircleColor(circleColorValue){
-        d3.selectAll(".mycircle")
-            .attr("fill",function(d,i){
-                return circleColorValue
-            })
-            .style("fill-opacity",function(d,i){
-                return 1
-            })
-    }
     //改变网页的中英文显示
     function changeLanChinese(){
         
             temp_lan="chinese"
-            $(".titleText").text("北京大学地图可视化")
             d3.selectAll(".country_text")
                 .text(function(d){
                     let t_name= d.properties.chinese_name                            
@@ -2480,52 +1808,10 @@ function add_nanhai_svg(nanhai_width){
                     return local[1]+18*font_scale;
                 }
                 })
-
-
-            d3.selectAll(".point_text")
-                .text(function(d,i){
-                    if (d.chinese_event.split(":").length==2) return d.chinese_event.split(":")[1]
-                    if(is_data2axis==0) return date2str(d.year)+chineses_unit+": "+d.chinese_event;
-                    else return d.year+chineses_unit+": "+d.chinese_event;
-                });
-            d3.selectAll(".source1")
-                .text("数据来源: "+dataSource_chinese)
-            d3.selectAll(".source2")
-                .text("地图数据来源: "+mapSource)
-            d3.selectAll(".shadow_title")
-                  .text(chinese_title);
-            d3.selectAll(".title")
-                .text(chinese_title)
-            d3.selectAll(".subtitle")
-                .text(sub_tiltle_chinese)
-            if(use_dragBlock==1){
-                d3.selectAll(".overview_country")
-                    .text(function(){
-                                    let t_country=0
-                                    if(map_data.overview.hasOwnProperty(temp_time.toString())!=false) t_country=map_data.overview[temp_time.toString()].country_num
-                                    return overview_chinese[0]+": "+t_country
-                                })
-                d3.selectAll(".overview_num")
-                    .text(function(){
-                                    let t_num=0
-                                    if(map_data.overview.hasOwnProperty(temp_time.toString())!=false) t_num=map_data.overview[temp_time.toString()].data_sum
-                                    return overview_chinese[1]+": "+t_num
-                                })
-             }
-
-
     }
     function changeLanEnglish(){
 
             temp_lan="english"
-            $(".titleText").text("Map Visualization Library")
-            d3.selectAll(".country_text")
-                .text(function(d){
-                    let t_name=d.properties.chinese_name
-                    if(d.properties.hasData==1&&d.properties.chinese_name.length<3||(t_name=="内蒙古"||t_name=="黑龙江"))
-                     return d.properties.name.split(" ")[0]
-                    else return ""
-                })
             d3.selectAll(".country_text2")
                 .text(function(d){
                     if(d.properties.hasData==1) return d.properties.name.split(" ")[1]
@@ -2540,39 +1826,6 @@ function add_nanhai_svg(nanhai_width){
                     else return local[1]+28*font_scale;
                 }
                 })
-
-
-            d3.selectAll(".point_text")
-                .text(function(d,i){
-                    if (d.chinese_event.split(":").length==2) return d.event.split(":")[1]
-                    if(is_data2axis==0) return date2str(d.year)+num_unit+": "+d.event;
-                    else return d.year+num_unit+": "+d.event;
-                });
-            d3.selectAll(".source1")
-                .text("Data Source: "+dataSource)
-            d3.selectAll(".source2")
-                .text("Map Source: "+mapSource)
-            d3.selectAll(".shadow_title")
-                  .text(web_title);
-            d3.selectAll(".title")
-                .text(web_title)
-            d3.selectAll(".subtitle")
-                .text(sub_tiltle)
-            if(use_dragBlock==1){
-                d3.selectAll(".overview_country")
-                    .text(function(){
-                                    let t_country=0
-                                    if(map_data.overview.hasOwnProperty(temp_time.toString())!=false) t_country=map_data.overview[temp_time.toString()].country_num
-                                    return "Countries: "+t_country
-                                })
-                d3.selectAll(".overview_num")
-                    .text(function(){
-                                    let t_num=0
-                                    if(map_data.overview.hasOwnProperty(temp_time.toString())!=false) t_num=map_data.overview[temp_time.toString()].data_sum
-                                    return "Confirmed: "+t_num
-                                })
-             }
-
         
     }
 
