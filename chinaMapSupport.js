@@ -904,11 +904,6 @@ function add_nanhai_svg(nanhai_width){
                 .style("stroke-width",function(d){
                         return 
                 })
-                .style("fill",function(d){
-                if(d.source.name=="Portugal"){
-                    return "black"
-                }
-                })
             d3.selectAll(".mycircle")
                 .attr("r",function(d,i){
                             return 6*font_scale
@@ -1161,58 +1156,7 @@ function add_nanhai_svg(nanhai_width){
                     }
                     else return 0
                 })
-                .style("fill",function(d){
-                    if(is_data2axis==0){
-                        return 
-                            /*let num0=d.properties.main_data[year_0.toString()]
-                            let num1=d.properties.main_data[year_1.toString()]
-                            let brush_num=num1-num0
-                            //console.log(num1-num0)
-                            for(var k=0;k<data_range.length;k++){
-                                if(brush_num<=data_range[k].range[1]&&brush_num>=data_range[k].range[0]) return ""
-                            }*/
 
-                    }
-                    let temp_data=d.main_data
-                        //if(is_date==1) temp_data=countGapDays(start_date,temp_data)
-                    if((Math.abs(d.target.x-d.source.x)<15||d.source.name=="Portugal")){
-                        if(temp_data>=year_0&&temp_data<=year_1) return "black"
-                    }
-                })
-        d3.selectAll(".mycircle")
-                .attr("r",function(d,i){
-                    return 0
-                    if(is_data2axis==0){
-                        return 0
-                            /*let num0=d.properties.main_data[year_0.toString()]
-                            let num1=d.properties.main_data[year_1.toString()]
-                            let brush_num=num1-num0
-                            //console.log(num1-num0)
-                            for(var k=0;k<data_range.length;k++){
-                                if(brush_num<=data_range[k].range[1]&&brush_num>=data_range[k].range[0]) return 6*font_scale
-                            }
-                        return 0*/
-
-                    }
-                    let temp_data=d.main_data
-                    //if(is_date==1) temp_data=countGapDays(start_date,temp_data)
-                    if(temp_data<year_1&&temp_data>year_0){
-                            return 6*font_scale
-                    }
-                    else{
-                        return 0
-                    }
-                })
-                .style("fill-opacity",function(d,i){
-                    if(is_data2axis==0){
-                        return 0
-
-                    }
-                    let temp_data=d.main_data
-                    //if(is_date==1) temp_data=countGapDays(start_date,temp_data)
-                    if(temp_data<year_1&&temp_data>year_0) return 0.4
-                        else return 0
-                })
              d3.selectAll(".click_text_1")
                 .text("")
              d3.selectAll(".click_text_2")
@@ -1461,14 +1405,7 @@ function add_nanhai_svg(nanhai_width){
                     return 0
                 }
             })
-            .style("fill",function(d){
-                if(d.source.name=="Portugal"){
-                    if(d.source.name==temp_country.properties.name||d.target.name==temp_country.properties.name){
-                    return "black"
-                }
-                }
-
-             }).style("opacity",function(d){
+            .style("opacity",function(d){
                 if(use_dragBlock==1 && d.date>temp_time) return 0
                 return 1
             })
