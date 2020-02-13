@@ -1,17 +1,31 @@
 [
   {
-    "id": "32",
+    "id": "50",
     "source": {
-      "name": "jiangsu",
-      "x": 119.8586,
-      "y": 32.915
+      "name": "chongqing",
+      "x": 107.7539,
+      "y": 30.1904
     },
     "target": {
       "name": "xiaoganshi",
       "x": 113.9502,
       "y": 31.1188
     },
-    "stage": 14
+    "stage": 1
+  },
+  {
+    "id": "23",
+    "source": {
+      "name": "heilongjiang",
+      "x": 127.1445,
+      "y": 46.2156
+    },
+    "target": {
+      "name": "xiaoganshi",
+      "x": 113.9502,
+      "y": 31.1188
+    },
+    "stage": 1
   },
   {
     "id": "37",
@@ -25,21 +39,7 @@
       "x": 115.2686,
       "y": 30.6628
     },
-    "stage": 15
-  },
-  {
-    "id": "41",
-    "source": {
-      "name": "henan",
-      "x": 113.0668,
-      "y": 33.8818
-    },
-    "target": {
-      "name": "suizhoushi",
-      "x": 113.4338,
-      "y": 31.8768
-    },
-    "stage": 5
+    "stage": 1
   },
   {
     "id": "43",
@@ -49,53 +49,123 @@
       "y": 27.3779
     },
     "target": {
+      "name": "huanggangshi",
+      "x": 115.2686,
+      "y": 30.6628
+    },
+    "stage": 1
+  },
+  {
+    "id": "36",
+    "source": {
+      "name": "jiangxi",
+      "x": 116.0156,
+      "y": 27.29
+    },
+    "target": {
+      "name": "suizhoushi",
+      "x": 113.4338,
+      "y": 31.8768
+    },
+    "stage": 1
+  },
+  {
+    "id": "44",
+    "source": {
+      "name": "guangdong",
+      "x": 113.4668,
+      "y": 22.8076
+    },
+    "target": {
       "name": "jingzhoushi",
       "x": 113.291,
       "y": 30.0092
     },
-    "stage": 6
+    "stage": 1
   },
   {
-    "id": "13",
+    "id": "46",
     "source": {
-      "name": "hebei",
-      "x": 115.4004,
-      "y": 39.4688
+      "name": "hainan",
+      "x": 109.9512,
+      "y": 19.2041
+    },
+    "target": {
+      "name": "jingzhoushi",
+      "x": 113.291,
+      "y": 30.0092
+    },
+    "stage": 1
+  },
+  {
+    "id": "21",
+    "source": {
+      "name": "liaoning",
+      "x": 122.0438,
+      "y": 41.0889
     },
     "target": {
       "name": "xiangyangshi",
       "x": 111.9397,
       "y": 31.9263
     },
-    "stage": 9
+    "stage": 1
   },
   {
-    "id": "34",
+    "id": "64",
     "source": {
-      "name": "anhui",
-      "x": 117.2461,
-      "y": 32.0361
+      "name": "ningxia",
+      "x": 105.9961,
+      "y": 37.3096
+    },
+    "target": {
+      "name": "xiangyangshi",
+      "x": 111.9397,
+      "y": 31.9263
+    },
+    "stage": 1
+  },
+  {
+    "id": "32",
+    "source": {
+      "name": "jiangsu",
+      "x": 119.8586,
+      "y": 32.915
     },
     "target": {
       "name": "huangshishi",
       "x": 115.0159,
       "y": 29.9213
     },
-    "stage": 7
+    "stage": 1
   },
   {
-    "id": "50",
+    "id": "35",
     "source": {
-      "name": "chongqing",
-      "x": 107.7539,
-      "y": 30.1904
+      "name": "fujian",
+      "x": 118.3008,
+      "y": 25.9277
     },
     "target": {
       "name": "yichangshi",
       "x": 111.1707,
       "y": 30.7617
     },
-    "stage": 11
+    "stage": 1
+  },
+  {
+    "id": "15",
+    "source": {
+      "name": "neimenggu",
+      "x": 111.73,
+      "y": 42.83
+    },
+    "target": {
+      "name": "jingmenshi",
+      "x": 112.6758,
+      "y": 30.9979
+    },
+    "stage": 1
   },
   {
     "id": "33",
@@ -112,74 +182,46 @@
     "stage": 1
   },
   {
-    "id": "44",
+    "id": "14",
     "source": {
-      "name": "guangdong",
-      "x": 113.4668,
-      "y": 22.8076
-    },
-    "target": {
-      "name": "ezhoushi",
-      "x": 114.7302,
-      "y": 30.4102
-    },
-    "stage": 12
-  },
-  {
-    "id": "36",
-    "source": {
-      "name": "jiangxi",
-      "x": 116.0156,
-      "y": 27.29
-    },
-    "target": {
-      "name": "xianningshi",
-      "x": 114.2578,
-      "y": 29.87
-    },
-    "stage": 16
-  },
-  {
-    "id": "61",
-    "source": {
-      "name": "shanxi",
-      "x": 109.5996,
-      "y": 35.7396
-    },
-    "target": {
-      "name": "shiyanshi",
-      "x": 110.5115,
-      "y": 32.3877
-    },
-    "stage": 2
-  },
-  {
-    "id": "51",
-    "source": {
-      "name": "sichuan",
-      "x": 101.9199,
-      "y": 30.1904
+      "name": "Shanxi",
+      "x": 112.4121,
+      "y": 37.6611
     },
     "target": {
       "name": "xiantaoshi",
       "x": 113.3789,
       "y": 30.3003
     },
-    "stage": 3
+    "stage": 1
   },
   {
-    "id": "31",
+    "id": "14",
     "source": {
-      "name": "shanghai",
-      "x": 121.4648,
-      "y": 31.2891
+      "name": "Shanxi",
+      "x": 112.4121,
+      "y": 37.6611
     },
     "target": {
       "name": "tianmenshi",
       "x": 113.0273,
       "y": 30.6409
     },
-    "stage": 10
+    "stage": 1
+  },
+  {
+    "id": "14",
+    "source": {
+      "name": "Shanxi",
+      "x": 112.4121,
+      "y": 37.6611
+    },
+    "target": {
+      "name": "qianjiangshi",
+      "x": 112.7637,
+      "y": 30.3607
+    },
+    "stage": 1
   },
   {
     "id": "52",
@@ -189,25 +231,39 @@
       "y": 26.9385
     },
     "target": {
-      "name": "enshitujiazumiaozuzizhizhou",
-      "x": 109.5007,
-      "y": 30.2563
+      "name": "ezhoushi",
+      "x": 114.7302,
+      "y": 30.4102
     },
-    "stage": 4
+    "stage": 1
   },
   {
-    "id": "11",
+    "id": "53",
     "source": {
-      "name": "beijing",
-      "x": 116.4551,
-      "y": 40.2539
+      "name": "yunnan",
+      "x": 101.0652,
+      "y": 25.1807
     },
     "target": {
-      "name": "qianjiangshi",
-      "x": 112.7637,
-      "y": 30.3607
+      "name": "xianningshi",
+      "x": 114.2578,
+      "y": 29.87
     },
-    "stage": 13
+    "stage": 1
+  },
+  {
+    "id": "45",
+    "source": {
+      "name": "guangxi",
+      "x": 107.7813,
+      "y": 23.6426
+    },
+    "target": {
+      "name": "shiyanshi",
+      "x": 110.5115,
+      "y": 32.3877
+    },
+    "stage": 1
   },
   {
     "id": "12",
@@ -217,10 +273,24 @@
       "y": 39.4189
     },
     "target": {
+      "name": "enshitujiazumiaozuzizhizhou",
+      "x": 109.5007,
+      "y": 30.2563
+    },
+    "stage": 1
+  },
+  {
+    "id": "13",
+    "source": {
+      "name": "hebei",
+      "x": 115.4004,
+      "y": 39.4688
+    },
+    "target": {
       "name": "shennongjialinqu",
       "x": 110.4565,
       "y": 31.5802
     },
-    "stage": 8
+    "stage": 1
   }
 ]

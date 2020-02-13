@@ -6,11 +6,12 @@
     <title>Map Visualization Library</title>
  
     <style>
-        html,body{
-            //background:rgb(200,200,200);
-            background:rgb(255,255,255);
-            width:100%;
-            height:100%;
+        body{
+            margin: 0px;
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            overflow-x: hidden;
         }
         @font-face {
             font-family: Khand-Regular;
@@ -27,9 +28,9 @@
             font-family: Khand-Regular PingFang-SC;
         }
         .title{
-                fill:rgb(192,143,145);
-                font-weight: bold;
-                text-decoration:underline;
+                fill:#333333;
+                font-weight: 600;
+                font-family: PingFang-SC;
         }
         .subtitle{
             fill:rgb(60,60,60);
@@ -65,9 +66,9 @@
         }
         .state {
             //fill: rgb(160,160,160);
-            fill: rgb(243,243,243);
-            stroke: rgb(200,200,200);
-            stroke-width: 0.06%;
+            fill: rgb(255,255,255);
+            stroke: rgb(80,80,80);
+            stroke-width: 0.1vmin;
             cursor:pointer;
         }
         .axis path,
@@ -78,14 +79,32 @@
             shape-rendering: crispEdges;
         }
         .axis text {
-            font-size: 1vmin;
+            font-size: 2vmin;
         }
         .links{
         fill:none;
-        /*stroke:rgb(227,113,40);*/
-        stroke: rgb(190,190,190);
+        stroke: #de5e5b;
         stroke-width:0.2%;
-         }
+        animation: changes 2s linear infinite;
+         } 
+         @keyframes changes {
+            0%   {stroke-dasharray: 1vmin,1vmin;}
+            50%  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+            100% {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
+        @-moz-keyframes changes
+        {
+            0%   {stroke-dasharray: 1vmin,1vmin;}
+            50%  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+            100% {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
+
+        @-webkit-keyframes changes
+        {
+            0%   {stroke-dasharray: 1vmin,1vmin;}
+            50%  {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+            100% {stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+        }
         .title_text{
             font-size: 30;
             fill: #ffffff;
@@ -171,10 +190,10 @@
         }
         #mapPanel{
             position: absolute;
-            top:6%;
-            left:0;
-            width:100%;
-            height:94%;
+            top:2vh;
+            left:2vw;
+            width:96vw;
+            height:96vh;
 
             //border:.2vmin solid rgb(60,60,60);
         }
@@ -254,8 +273,8 @@
             background-color: rgb(220,220,220);
             color: rgb(80,80,80);
             border: 0.2vmin solid rgb(160,160,160);
-            -moz-border-radius:1vmin;  
-            -webkit-border-radius:1vmin;  
+            -moz-border-radius:2vmin;  
+            -webkit-border-radius:2vmin;  
             font-size: 1.7vmin;
             text-align: center;
         }
@@ -319,134 +338,23 @@
       height: 3.8vmin;
       width: 3.8vmin;
   }
-  .map_div{
-    position: absolute;
-    box-shadow:-2px 0px 3px 3px rgba(20,20,20,0.05);
-    border-radius:5px;
-  }
 
     </style>
 </head>
  
 <body>
-<div id="header">
-    <div class="titleText">Map Visualization Library</div>
-        <button onclick="changeLanChinese()" class="mybutton" id="chiButton">中</button>
-        <button onclick="changeLanEnglish()" class="mybutton" id="engButton">EN</button>
-</div>
 <div id="mapPanel">
-    <div id="floor">
-        <img id="icon_img" src="icon.png"/>
-        <div id="floor_text">
-        北京大学可视化与可视分析实验室<br>
-        PKU Visualization and Visual Analytics Group
-        </div>
-    </div>
 </div>
 <!--div class="partitionLine"><hr style="height:100vh;fill:rgb(60,60,60)"></div!-->
 <img id="hide_img" onclick="HideLeftView()" src="hidden.png" style="display: none;"/>
 <img id="show_img" onclick="ShowLeftView()" src="show.png" style="display: none;"/>
-<div class="selectPanel" id="LeftSelectPanel" style="display: none;">
-    <div class="generateMap selectBox">
-        <div class="selectTitle">
-            <span>Generate map</span>
-        </div>
-        <div class="existData">
-            <span>Select base map</span><br>
-            <select name="test" onchange="changeBasicMap(this.options[this.options.selectedIndex].value)">
-                <option value="world">world</option>
-                <!--option value="china">china</option!-->
-            </select>
-            <br><span>Select dataset</span><br>
-            <select name="test" onchange="changeDataSet(this.options[this.options.selectedIndex].value)">
-                <option value="nCoV">nCoV</option>
-                <option value="policy">nCoV policy</option>
-                <option value="ASF">African swine fever</option>
-            </select> 
-        </div>
-    </div>
-    <div class="changeStyle selectBox">
-        <div class="selectTitle">
-            <span>Style</span>
-        </div>
-        <div class="styleTypes">
-            <span>Line</span><br>
-            <select name="test" onchange="changeLineColor(this.options[this.options.selectedIndex].value)">
-                <option value="white">White</option>
-                <option value="rgb(110,110,110)">Gray</option>
-            </select>
-            <br><span>Circle</span><br>
-            <select name="test" onchange="changeCircleColor(this.options[this.options.selectedIndex].value)">
-                <option value="rgb(247,254,174)">Yellow</option>
-                <option value="white">White</option>
-            </select>
-            <br><span>Color Scale</span><br>
-            <select name="test" onchange="changeColorRange(this.options[this.options.selectedIndex].value)">
-                <option value="0">Red Group</option>
-                <!--option value="1">Blue Group</option>
-                <option value="2">Yellow Group</option!-->
-            </select>
-        </div>
-    </div>
-    <div class="uploadData selectBox">
-        <div class="selectTitle">
-            <span>Upload Data</span>
-        </div>
-        <div class="uploadPanel">
-            <div class="detailsText">
-                <span>You can create new maps by uploading your own data.</span><br><br>
-                <span>For details and structures of the data, please check the descriptions.</span><br>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!--div class="box" style="position:absolute;left:0px;top:0px">
-    <div class="content">
-        <span>Line</span><br>
-        <select name="test">
-            <option value="0">White</option>
-            <option value="1">Red</option>
-        </select>
-        <br><span>Circle</span><br>
-        <select name="test">
-            <option value="0">Yellow</option>
-            <option value="1">White</option>
-        </select>
-        <br><span>Color Scale</span><br>
-        <select name="test">
-            <option value="0">Red Group</option>
-            <option value="1">Blue Group</option>
-            <option value="2">Yellow Group</option>
-        </select>
-    </div>
-    <input type="button" class="showButton" value="隐藏">
-<script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-<script type="text/javascript">
-    $(function(){
-    $(".content").show(); // 默认隐藏下拉框
-    //$(":button").click(function() {
-    $(".showButton").click(function() {
-        $(".content").toggle();  // 已经显示则隐藏，隐藏了则显示
-        $(this).val($(this).val()=="显示"?"隐藏":"显示");
-    })
-})
-
-</script>
-</div!-->
 
 <div id="view" style="position:absolute;left:40px;top:200px">
 <script src="d3.v4.min.js"></script>
 <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-<!--script src="mapLibPolicy.js"></script!-->
 <script src="chinaMapSupport.js"></script>
-<script>
-    $(window).resize(function(){
-        //alert("窗体大小改变了！");
-        location.replace(location.href); 
-    });
-</script>
+
+
 </div>
 </body>
- 
 </html>

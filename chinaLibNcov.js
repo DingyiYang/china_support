@@ -872,8 +872,8 @@ d3.xml("southsea.svg", function(error, xmlDocument) {
                             
             arrowMarker.append("path")
                 .attr("d",arrow_path)
-                .attr("fill","rgb(190,190,190)")
-                .attr("fill-opacity",0.7);
+                .attr("fill","rgb(160,160,160)")
+                .attr("fill-opacity",1);
             //迁移过程曲线
             // filters go in defs element
             var defs = svg.append("defs");
