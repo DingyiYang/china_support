@@ -142,15 +142,31 @@
 
     temp_map="china"
     selected_dataset="support"
+    let color_support=[
+                    "","rgba(187,0,0,0.9)","rgba(240,140,131,1)","rgba(0, 186, 209, 0.5)","rgba(192, 223, 217,0.5)","rgba(201, 216, 197,0.5)",
+                    //5-8
+                    "rgba(137, 189, 211,1)","rgba(168,182,198,1)","rgba(137, 189, 211,0.7)","rgb(168,182,198,0.6)",
+                    //9-10
+                    "rgba(248, 227, 149,1)","rgba(255,211,124,0.8)",
+                    //11-13
+                    "rgba(219,195,208,0.8)","rgba(125, 188, 169,0.5)","rgba(125, 188, 169,1)",
+                    //14-16
+                    "rgba(161, 63, 113,0.6)","rgba(224,80,56,0.5)","rgb(212, 126, 152,0.4)"]
+                let colorRange=d3.range(7).map(function(i) { return color_support[i] });
+                color=d3.scaleThreshold()//阈值比例尺
+                        .domain([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
+                        .range(color_support);
     changeView(temp_map+"_"+"support"+".json","path_china_nCoV.json",temp_map+"_web_info_"+"support"+".json")
 
 
 
     //基础地图数据获取
     function getMapData(fileName){
-        d3.json(fileName, function (error, cn) {
+        d3.json(fileName).then(cn=>{
             //基础地图数据的赋值
             map_data=cn
+            addMap()
+            addOtherInfo()
 
             })
     }
@@ -162,7 +178,7 @@
 
     //连线数据的获取
     function getPathData(fileName){
-        d3.json(fileName, function (error, move_path) {
+        d3.json(fileName).then(move_path=>{
             //连线数据的赋值
             path_data=move_path
         })
@@ -204,28 +220,8 @@
 
             temp_time=axis_end.toString()
             let axis_0=axis_start
-            let axis_1=axis_end
-            color=d3.scaleLinear()
-                .domain([0, data_range.length-1])
-                .range(["rgba(240,140,131,0.8)","rgba(187,0,0,0.9)" ])
-                .interpolate(d3.interpolateHcl);
-            if(selected_dataset=="support"){
-                //let color_support=["","rgb(255, 205, 210)","rgb(239, 154, 154)","rgb(229, 115, 115)","rgb(255, 224, 178)","rgb(255, 183, 77)","rgb(251, 140, 0)","rgb(239, 108, 0)"]
-                let color_support=[
-                    "","rgba(187,0,0,0.9)","rgba(240,140,131,1)","rgba(0, 186, 209, 0.5)","rgba(192, 223, 217,0.5)","rgba(201, 216, 197,0.5)",
-                    //5-8
-                    "rgba(137, 189, 211,1)","rgba(168,182,198,1)","rgba(137, 189, 211,0.7)","rgb(168,182,198,0.6)",
-                    //9-10
-                    "rgba(248, 227, 149,1)","rgba(255,211,124,0.8)",
-                    //11-13
-                    "rgba(219,195,208,0.8)","rgba(125, 188, 169,0.5)","rgba(125, 188, 169,1)",
-                    //14-16
-                    "rgba(161, 63, 113,0.6)","rgba(224,80,56,0.5)","rgb(212, 126, 152,0.4)"]
-                let colorRange=d3.range(7).map(function(i) { return color_support[i] });
-                color=d3.scaleThreshold()//阈值比例尺
-                        .domain([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])
-                        .range(color_support);
-                    }
+            let axis_1=d
+
             //如果是日期型数据
             if(is_date==1||is_data2axis==0||use_date_axis==1){
                 start_date=axis_range[0]
@@ -268,7 +264,6 @@
                         
                     })
                     .on("click",function(d){
-                        //if(d.properties.chinese_name=="湖北") getMapDataAll()
                             if(d.properties.hasData==1&&d.properties.chinese_name!="湖北") Showmessage(d)
                     })
                     .on("mouseout",function(d){
@@ -329,12 +324,6 @@
                 .attr("dy",function(d,i){              
                     return d.properties.dy
                 })
-                .on("click",function(){
-                    intext=1
-                })
-                .on("mouseout",function(){
-                    intext=0
-                })
                 .attr("font-size", function(d,i){
                     if(d.properties.main_data==1996) return 8*font_scale
                         else return 10*font_scale
@@ -380,12 +369,6 @@
                 .attr("dy",function(d,i){
                     
                         return d.properties.dy
-                })
-                .on("click",function(){
-                    intext=1
-                })
-                .on("mouseout",function(){
-                    intext=0
                 })
                 .attr("font-size", function(d,i){
                     if(d.properties.main_data==1996) return 8*font_scale
@@ -551,10 +534,6 @@
 
             d3.selectAll(".country_num_text").remove()
 
-            if(show_detail==0){
-                return true
-            }
-
 
             map_svg.selectAll(".country_num_text")
                 .data(map_data.features)
@@ -590,7 +569,7 @@
                 })              
                     .on("click",function(d){
                         //if(d.properties.chinese_name=="湖北") getMapDataAll()
-                            Showmessage(d)
+                           if(d.properties.hasData==1&&d.properties.chinese_name!="湖北") Showmessage(d)
                     })
                     .on("mouseout",function(d){
                         if(isregain==0) Regainmessage()
@@ -698,20 +677,11 @@
                  .attr("filter", function(d){
                     return "url(#drop-shadow)";
                 })
-                 .on("click",function(){
-                    //console.log("inline")
-                    inline=1;
-                    inmap=1
-                 })
-                 .on("mouseout",function(){
-                    inline=0;
-                    inmap=0
-                 })
                  .attr("stroke-width",0)
                  .attr("fill-opacity",0.06)
                  .attr("stroke-opacity",0.8)
                  .style("opacity",function(){
-                    return show_path
+                    return 0
                  });
 
             let img_w=width*0.03
@@ -821,7 +791,8 @@
                                 .attr("y",width*0.11)
                                 .attr("font-size","3.2vw")
                                 .style("fill","#b2b2b2")
-                                .text("截至 "+(new Date()).toLocaleString()+" 国家卫健委数据统计")
+                                //.text("截至 "+(new Date()).toLocaleString()+" 国家卫健委数据统计")
+                                .text("(7:00-10:00左右为数据更新高峰，显示可能略有滞后请谅解)")
             var title_rect=svg.append("rect")
                 .attr("class","title_rect")
                     .attr("x",0)
@@ -831,7 +802,7 @@
                   .attr("rx",width*0.005)
                   .attr("ry",width*0.005)
                   .attr("fill","#00bad1")
-            svg.append("image")
+            /*svg.append("image")
                     .attr("xlink:href",function(d,i){
                         return "icon/dataEcplain.svg"
                     })
@@ -850,7 +821,7 @@
                     .attr("cursor","pointer")
                     .on("click",function(){
                         d3.select("#dataExplain").style("display","")
-                    })
+                    })*/
             svg.append("image")
                 .attr("xlink:href",function(d,i){
                         return "icon/南海诸岛.svg"
@@ -1622,164 +1593,125 @@
                     path_data={}
                 }
                 
-            getMapNum()
+            //getMapNum()
+            getApiData()
 
 
     }
+    function getApiData(){
+            let apiInfo = {
+                'country': {
+                    'dev': 'https://ehcard-test.wecity.qq.com/api',
+                    'prod': 'https://wechat.wecity.qq.com/api',
+                    'requestBody': {
+                        "service": "THOuterDataServer",
+                        "func": "getChinaTotal",
+                        "args": {
+                            "req": {
+                                "none": "none"
+                            }
+                        }
+                    }
+                },
+                'province': {
+                    'dev': 'https://ehcard-test.wecity.qq.com/api',
+                    'prod': 'https://wechat.wecity.qq.com/api',
+                    'requestBody': {
+                        "args":{
+                            "req":{
+                                "none":""
+                            }
+                        },
+                        "service":"THOuterDataServer",
+                        "func":"getAreaInfo",
+                        "context":{
+                        }
+                    }
+                },
+                'city': {
+                  'dev': 'https://ehcard-test.wecity.qq.com/api',
+                  'prod': 'https://wechat.wecity.qq.com/api',
+                  'requestBody': {
+                    "args":{
+                        "req":{
+                            "area":"湖北"
+                        }
+                    },
+                    "service":"THOuterDataServer",
+                    "func":"getCityInfo"
+                  }
+                }
+            }
+              var areas = ['上海', '云南', '内蒙古', '北京', '台湾', '吉林', '四川', '天津', '宁夏', '安徽', '山东', '山西', '广东', '广西', '新疆', '江苏', '江西', '河北', '河南', '浙江', '海南', '湖北', '湖南', '澳门', '甘肃', '福建', '西藏', '贵州', '辽宁', '重庆', '陕西', '青海', '香港', '黑龙江']
+              let isDev = false
+              let dataKey = 'prod'
+              if (isDev) {
+                dataKey = 'dev'
+              }
+              function requestDataCountry(api){
+                let requestBody = api['requestBody']
+                let requestInit  = {
+                    method: "POST",
+                    headers: [
+                        ["Content-Type", "application/json"]
+                    ],
+                    // credentials: "include",
+                    body:  JSON.stringify(api['requestBody'])
+                }
+                // console.log('api data for ', provinceName)
+                return d3.json(api[dataKey], requestInit)
+              }
+              function requestData(api, provinceName='湖北'){
+                let requestBody = api['requestBody']
+                requestBody['args']['req']['area'] = provinceName
+                let requestInit  = {
+                    method: "POST",
+                    headers: [
+                        ["Content-Type", "application/json"]
+                    ],
+                    // credentials: "include",
+                    body:  JSON.stringify(api['requestBody'])
+                }
+                // console.log('api data for ', provinceName)
+                return d3.json(api[dataKey], requestInit)
+              }
 
-    //获取地图中每个地图的数据
-    function getMapNum(){
-        let chinaMap
-        let chinaData
-        d3.json("chinamap/china_provinces_bilingual.json",function(temp_map_data){
-                //console.log(data)
-                chinaMap=temp_map_data
-                getHubeiNum(chinaMap)
-            })
-    }
-    function getHubeiNum(chinaMap){
-        let chinaData
-        d3.json("chinamap/hubei_bilingual.json",function(temp_map_data){
-                //console.log(data)
-                hubeiMap=temp_map_data
-                d3.csv("https://tanshaocong.github.io/2019-nCoV/map.csv",function(data){
-                //console.log(data)
-                    chinaData=data
-                    //求解湖北的数据
-                    let province_num=0
-                    //中国的数据范围
-                    let china_data_range=[1,40,80,160,320,640,30000]
-                    let pre_num={}
-                    let pre_province_num={}
-                    let start_date=date_chinese2eng(chinaData[0]["公开时间"])
-                    let end_date=date_chinese2eng(chinaData[chinaData.length-1]["公开时间"])
-                    let update_day=parseInt(chinaData[chinaData.length-1]["公开时间"].split("月")[1].split("日")[0])
-                    for(var i=0;i<chinaMap.features.length;i++){
-                        let t_province=chinaMap.features[i].properties.chinese_name
-                        pre_province_num[t_province]=0
-                        chinaMap.features[i].properties.main_data={}
-                    }
-                    for(var i=0;i<hubeiMap.features.length;i++){
-                        let t_county=hubeiMap.features[i].properties.chinese_name.substr(0,2)
-                        pre_num[t_county]=0
-                        hubeiMap.features[i].properties.main_data={}
-                    }
-                    for(var i=0;i<chinaData.length;i++){
-                        //console.log(parseInt(""))
-                        let temp_province=chinaData[i]["省份"]
-                        let t_county=chinaData[i]["城市"]
-                        if(chinaData[i]["类别"]=="地区级"&&temp_province!="湖北"){
-                            for(var j=0;j<chinaMap.features.length;j++){
-                                if(chinaMap.features[j].properties.chinese_name==temp_province){
-                                    //console.log(chinaData[j])
-                                    let temp_record=chinaData[i]
-                                    let t_time=date_chinese2eng(temp_record["公开时间"])
-                                    let t_data=temp_record["新增确诊病例"] 
-                                        if(t_data!=""&&t_data!="0") pre_province_num[temp_province]+=parseInt(t_data)
-                                    if(chinaData[i]["核减"]!="") pre_province_num[temp_province]+=parseInt(chinaData[i]["核减"]) 
-                                    //if(isNaN(pre_province_num[temp_province])==true) console.log(temp_record)
-                                        chinaMap["features"][j]["properties"]["main_data"][t_time]=pre_province_num[temp_province]
-                                    break
-                                }
-                            }
-                        }
-                        if(temp_province!="湖北") continue
-                        for(var j=0;j<hubeiMap.features.length;j++){
-                            if(hubeiMap.features[j].properties.chinese_name.substr(0,2)==t_county.substr(0,2)){
-                                //console.log(chinaData[j])
-                                t_county=t_county.substr(0,2)
-                                let temp_record=chinaData[i]
-                                let t_time=date_chinese2eng(temp_record["公开时间"])
-                                let t_data=temp_record["新增确诊病例"]
-                                    if(t_data!=""&&t_data!="0") pre_num[t_county]+=parseInt(t_data)
-                                if(chinaData[i]["核减"]!="") pre_num[t_county]+=parseInt(chinaData[i]["核减"]) 
-                                //if(isNaN(pre_num[t_county])==true) console.log(temp_record)
-                                    hubeiMap["features"][j]["properties"]["main_data"][t_time]=pre_num[t_county]
-                                break
-                            }
-                        }
-                        //console.log(chinaMap["features"][i].properties)
-                    }
-                    //中国的
-                    for(var i=0;i<chinaMap.features.length;i++){
-                        let pre_data=0
-                        for(var j=parseInt(start_date);j<=parseInt(end_date);){
-                            if(chinaMap.features[i].properties.main_data.hasOwnProperty(j)==false)
-                                chinaMap.features[i].properties.main_data[j]=pre_data
-                            else
-                                pre_data=chinaMap.features[i].properties.main_data[j]
-                            j=countDate(j,1).replaceAll("/","")
-                        }
-                    }
-                    for(var i=0;i<chinaMap.features.length;i++){
-                        for(var j=0;j<map_data.features.length;j++){
-                            if(chinaMap.features[i].properties.chinese_name==map_data.features[j].properties.chinese_name){
-                                map_data["features"][j]["properties"]["main_data"]=chinaMap.features[i].properties.main_data[end_date]
-                                province_confirm_num[chinaMap.features[i].properties.chinese_name]=chinaMap.features[i].properties.main_data[end_date]
-                                break
+              requestDataCountry(apiInfo['province']).then(file=>{
+                 //console.log('======= country', file)
+             
+                Promise.all(areas.map(d=>requestData(apiInfo['city'], d))).then(files=>{
+                   //console.log('api data all========', files) 
+                   let province_num={}
+                    for(var i=0;i<files.length;i++){
+                        let temp_name=files[i].args.rsp.areaInfo.area
+                        let temp_confirm=files[i].args.rsp.areaInfo.confirm
+                        province_num[temp_name]=temp_confirm
+                        if(temp_name=="湖北"){
+                            for(var j=0;j<files[i].args.rsp.city.length;j++){
+                                let temp_county=files[i].args.rsp.city[j].mapCity
+                                province_num[temp_county]=files[i].args.rsp.city[j].confirm
                             }
                         }
                     }
-                    //console.log((chinaMap))
-                    //湖北的
-                    for(var i=0;i<hubeiMap.features.length;i++){
-                        let pre_data=0
-                        for(var j=parseInt(start_date);j<=parseInt(end_date);){
-                            if(hubeiMap.features[i].properties.main_data.hasOwnProperty(j)==false)
-                                hubeiMap.features[i].properties.main_data[j]=pre_data
-                            else
-                                pre_data=hubeiMap.features[i].properties.main_data[j]
-                            j=countDate(j,1).replaceAll("/","")
-                        }
+                    for(var i=0;i<map_data.features.length;i++){
+                        map_data.features[i].properties.main_data=province_num[map_data.features[i].properties.chinese_name]
                     }
-                    let county_nums=[]
-                    for(var i=0;i<hubeiMap.features.length;i++){
-                        for(var j=0;j<map_data.features.length;j++){
-                            if(hubeiMap.features[i].properties.chinese_name==map_data.features[j].properties.chinese_name){
-                                map_data["features"][j]["properties"]["main_data"]=hubeiMap.features[i].properties.main_data[end_date]
-                                county_confirm_num[hubeiMap.features[i].properties.chinese_name]=hubeiMap.features[i].properties.main_data[end_date]
-                                county_nums.push(parseInt(hubeiMap.features[i].properties.main_data[end_date]))
-                                break
-                            }
-                        }
-                    }
-                    county_nums=county_nums.sort(compare)
-                    //console.log(county_nums)
-
-                    function compare(num1,num2){
-                      return num2 - num1;
-                    }
-                    //console.log(county_confirm_num)
-                    let temp_id=0
-                    for(var i=0;i<county_nums.length;i++){
-                        for(var key in county_confirm_num){
-                            if(county_confirm_num[key]==county_nums[i]&&county_order.hasOwnProperty(key)==false){
-                                county_order[key]=i
-                                county_id[key]=temp_id
-                                temp_id+=1
-                                if(key=="孝感市"||key=="黄冈市"||key=="荆州市"||key=="襄阳市"||key=="荆门市"){
-                                    temp_id+=1
-                                }
-                            }
-                        }
-                    }          
                     d3.json("china_web_info_support.json", function (error, components) {
-                        components.axis_range[1]=parseInt(end_date)
                         getComponentData(components)
                     })
+                    //console.log(path_data)
                     setTimeout(function(){ 
-                        addMap()
                         addMapStatistic()
-                        addOtherInfo()
                         //更改标题的数据截至时间
-                        svg.select(".end_time_text")
-                            .text("截至 2020年"+chinaData[chinaData.length-1]["公开时间"]+"24:00 国家卫健委数据统计")
+                        /*svg.select(".end_time_text")
+                            .text("截至 2020年"+chinaData[chinaData.length-1]["公开时间"]+"24:00 国家卫健委数据统计")*/
                         addPath(true)
                         addDistrictName()
                         changeLanChinese()
-                    }, 1000);
-                })
+                    }, 100);  
             })
+                
+        })
     }
 
     //改变网页的中英文显示
