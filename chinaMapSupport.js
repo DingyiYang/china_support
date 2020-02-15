@@ -339,7 +339,7 @@
                     if(d.properties.main_data==1996) return 8*font_scale
                         else return 10*font_scale
                 })
-                .style("fill-opacity",0)
+                .attr("display","none")
                 .attr("fill","#333333")
                 .attr("font-family","")
                 .attr("font-weight","bold")
@@ -391,8 +391,7 @@
                     if(d.properties.main_data==1996) return 8*font_scale
                         else return 10*font_scale
                 })
-                .style("fill-opacity",0)
-                .style("fill-opacity",0)
+                .attr("display","none")
                 .attr("fill","#333333")
                 .attr("font-family","")
             d3.selectAll(".click_text_3").remove()
@@ -430,7 +429,7 @@
                     if(d.properties.main_data==1996) return 8*font_scale
                         else return 10*font_scale
                 })
-                .style("fill-opacity",0)
+                .attr("display","none")
                 .attr("fill","#333333")
                 .attr("font-family","")
                 .attr("font-weight","bold")
@@ -714,6 +713,7 @@
                  .style("opacity",function(){
                     return show_path
                  });
+
             let img_w=width*0.03
             let img_h=img_w/36*50
             map_svg.selectAll(".sourceimg")
@@ -793,7 +793,7 @@
                     Regainmessage()
                 })
                 .style("cursor","pointer")
-                .attr("opacity",0)
+                .attr("display","none")
             svg.append("text")
                 .attr("class","return_text")
                 .attr("x",width*0.03+width*0.2924/2)
@@ -806,8 +806,7 @@
                 })
                 .attr("text-anchor","middle")
                 .attr("font-family","")
-                .style("cursor","pointer")
-                .attr("opacity",0)
+                .style("cursor","pointer").attr("display","none")
 
             d3.selectAll(".title").remove()  
             var title=svg.append("text")
@@ -955,12 +954,12 @@
 
     function change_to_timerange(year_0,year_1){
         //console.log(year_0,year_1)
-        d3.selectAll(".remark_text").attr("opacity",1)
+        d3.selectAll(".remark_text").attr("display","")
         d3.selectAll(".sourceimg").attr("width",0)
         d3.selectAll(".targetimg").attr("width",0)
 
-        d3.selectAll(".return_text").attr("opacity",0)
-        d3.selectAll(".return_rect").attr("opacity",0)
+        d3.selectAll(".return_text").attr("display","none")
+        d3.selectAll(".return_rect").attr("display","none")
         d3.selectAll(".cover_rect").attr("opacity",0)
 
         proj=proj_china
@@ -969,20 +968,6 @@
             .selectAll("path")
             .attr("d",path)
 
-        d3.selectAll(".overview_country")
-            .text(function(){
-                            let t_country=0
-                            if(map_data.overview.hasOwnProperty(year_1.toString())!=false) t_country=map_data.overview[year_1.toString()].country_num
-                            if(temp_lan=="english") return overview_eng[0]+": "+t_country
-                                else return overview_chinese[0]+": "+t_country
-                        })
-        d3.selectAll(".overview_num")
-            .text(function(){
-                            let t_num=0
-                            if(map_data.overview.hasOwnProperty(year_1.toString())!=false) t_num=map_data.overview[year_1.toString()].data_sum
-                            if(temp_lan=="english") return overview_eng[1]+": "+t_num
-                                else return overview_chinese[1]+": "+t_num
-                        })
         d3.selectAll(".country_num_text")
             .text(function(d){
                     let t_name= d.properties.chinese_name                            
@@ -1017,6 +1002,7 @@
                 }
                 })
             .attr("opacity",1)
+            .attr("display","")
     
         d3.select(".state")
             .selectAll("path")
@@ -1113,6 +1099,7 @@
                     return local[1]+5*font_scale;
                 }
                 })
+                .attr("display","")
         d3.selectAll(".country_text2")
                 .style("fill-opacity",function(d){
                     if(selected_dataset=="support"&&d.properties.hasData==1) return .9
@@ -1138,17 +1125,7 @@
                     }
                     else return 0
                 })
-        d3.selectAll(".range_text")
-            .text(function(){
-                if(use_dragBlock==1){
-                        return date2str(year_1)
-
-                }
-                else if(is_date==1) return date2str(year_0)+"-"+date2str(year_1)
-                return date2str(parseInt(year_0))+"-"+date2str(parseInt(year_1))
-            })
-            //.style("fill","white")
-            .attr("opacity",1)
+                .attr("display","")
         if(hasPath==0) return true
 
         d3.selectAll(".support_links")
@@ -1160,7 +1137,7 @@
                 .text("")
              d3.selectAll(".click_text_2")
                 .text("")
-                d3.selectAll(".click_text_3")
+             d3.selectAll(".click_text_3")
                 .text("")
     }
 
@@ -1168,9 +1145,9 @@
     function Showmessage(temp_country){
         
         //console.log("show_message")
-        d3.selectAll(".remark_text").attr("opacity",0)
-        d3.selectAll(".return_text").attr("opacity",1)
-        d3.selectAll(".return_rect").attr("opacity",1)
+        d3.selectAll(".remark_text").attr("display","none")
+        d3.selectAll(".return_text").attr("display","")
+        d3.selectAll(".return_rect").attr("display","")
         d3.selectAll(".cover_rect").attr("opacity",0.8)
         let other_cp=temp_country.properties.cp
         for(var i=0;i<map_data.features.length;i++){
@@ -1245,24 +1222,9 @@
 
 
         d3.selectAll(".country_text")
-            .attr("x", function (d) {
-                    if(d.properties.cp==0) return ;
-                    if(d.id!=""){
-                    var local = proj([d.properties.cp[0], d.properties.cp[1]]);
-                    //console.log(local[0]);
-                    return local[0]-d.properties.name.split(" ")[0].length*2*font_scale;
-                }
-                })
-                .attr("y", function (d) {
-                    if(d.properties.cp==0) return ;
-                    if(d.id!=""){
-                    var local = proj([d.properties.cp[0], d.properties.cp[1]]);
-                    return local[1]+5*font_scale;
-                }
-                })
-            .style("fill-opacity",0)
+            .attr("display","none")
         d3.selectAll(".country_text2")
-            .style("fill-opacity",0)
+            .attr("display","none")
 
         d3.selectAll(".click_text_3")
             .attr("font-size",function(d,i){
@@ -1323,10 +1285,10 @@
                     return "cases:"
                 }
             })
-            .style("fill-opacity",function(d){
-                if(hasPath==1&&hasRelation(d,temp_country)==1) return 1
-                    if(d.properties.hasData==1&&d==temp_country) return 1
-                        else return 0
+            .attr("display",function(d){
+                if(hasPath==1&&hasRelation(d,temp_country)==1) return ""
+                    if(d.properties.hasData==1&&d==temp_country) return ""
+                        else return "none"
             })
             .attr("font-size",function(d){
                 if(d.properties.hasData==1&&d==temp_country) return 14*font_scale
@@ -1397,10 +1359,10 @@
                     return ""+d.properties.main_data
                 }
             })
-            .style("fill-opacity",function(d){
-                if(hasPath==1&&hasRelation(d,temp_country)==1) return 1
-                    if(d.properties.hasData==1&&d==temp_country) return 1
-                        else return 0
+            .attr("display",function(d){
+                if(hasPath==1&&hasRelation(d,temp_country)==1) return ""
+                    if(d.properties.hasData==1&&d==temp_country) return ""
+                        else return "none"
             })
             .attr("font-size",function(d){
                 if(d.properties.hasData==1&&d==temp_country) return 14*font_scale
@@ -1469,7 +1431,11 @@
                     return d.properties.name.split(" ")[0]
                 }
             })
-            .style("fill-opacity",1)
+            .attr("display",function(d){
+                if(hasPath==1&&hasRelation(d,temp_country)==1) return ""
+                    if(d.properties.hasData==1&&d==temp_country) return ""
+                        else return "none"
+            })
             .attr("font-size",function(d){
                 if(d.properties.hasData==1&&d==temp_country) return 16*font_scale
                 if(hasPath==1&&hasRelation(d,temp_country)==1){
@@ -1493,7 +1459,7 @@
                     else return local[1]+28*font_scale;
                 }
                 })
-            .attr("opacity",0)
+            .attr("display","none")
 
 
         //改变连线的显示
@@ -1564,12 +1530,6 @@
 
     //移开后恢复
     function Regainmessage(){
-        d3.selectAll(".viewrect")
-            .style("fill-opacity",0)
-        d3.selectAll(".click_text_1")
-            .style("fill-opacity",0)
-        d3.selectAll(".click_text_2")
-            .style("fill-opacity",0)
         change_to_timerange(axis_start,temp_time)
         return true
 
