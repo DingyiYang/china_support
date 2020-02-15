@@ -138,70 +138,6 @@
     let hasPath=0
     let inmap=0
     let intext=0
-
-//添加南海
-function add_nanhai_svg(nanhai_width){
-  nanhai_height = nanhai_width * 1.2
-  let nanhai_svg = map_svg.append("g")
-                .attr('transform', 'translate(' + proj_china([125.5,28])[0] + ',' + proj_china([110,24])[1] + ')')
-  let min_edge = nanhai_width 
-  center_location = [124.4, 13.2]
-  nanhai_svg.append("rect")
-    .attr("id", "nanhai_kuang")
-    .attr("width", nanhai_width)
-    .attr("height", nanhai_height)
-    .style("fill","rgb(255,255,255)")
-    .style("stroke","#ddd")
-
-  nanhai_svg.append("clipPath")    // define a clip path
-    .attr("id", "nanhai-clip") // give the clipPath an ID
-    .append("rect")          
-    .attr("width", nanhai_width)     
-    .attr("height", nanhai_height)   
-  nanhai_range = 3
-  let projection = d3.geoAlbers()
-    .rotate([-center_location[0], 0])
-    .center([-0, center_location[1]])
-    .scale(min_edge * nanhai_range )
-    .translate([nanhai_width , nanhai_height / 2])
-
-  let path = d3.geoPath()
-            .projection(projection)
-
-  nanhai_svg.append("text")
-    .attr("x", nanhai_width * 0.98)
-    .attr("y", nanhai_height * 0.95)
-    .attr("text-anchor", "end")
-    .text('中国南海')
-    .attr("font-size", nanhai_width*0.15)
-    .attr("font-family","")
-    .attr("fill","rgb(50,50,50)")
-
-  d3.json("nanhai.json",function (error, nanhai_map){
-      //console.log(nanhai_map)
-      nanhai_svg.selectAll("path")
-        .data(nanhai_map.features)
-        .enter().append("path")
-        .attr("d", path)
-        .attr("class", "small_province")
-        .attr("stroke-width", "1px")
-        .attr("stroke", "rgb(200,200,200)")
-        .attr("fill", "#F2F2F2")
-        /*.attr("province_index", function(d){
-          return 0
-        })*/
-        .attr('id', function(d, i){
-          return d.properties.name
-        })
-        .attr("clip-path", "url(#nanhai-clip)") 
-
-      nanhai_svg.select("#九段线")
-        .style('stroke-width', nanhai_width/40)
-        .style("stroke", "#ddd")
-        .attr("class", "nine_line")
-
-    })
-}
 //获取数据
 
     temp_map="china"
@@ -683,14 +619,6 @@ function add_nanhai_svg(nanhai_width){
 
     //添加区域的关联数据（颜色、详细信息等）
     function addMapStatistic(){
-        //添加帮助显示国家的rect
-            d3.selectAll(".viewrect").remove()
-            var coutry_box=svg.append("rect")
-                .attr("class","viewrect")
-                .attr("width",width/20)
-                .attr("height",height/20)
-                .style("fill","white")
-                .style("fill-opacity",.0)
     }
 
     //添加连线和circle
@@ -851,7 +779,7 @@ function add_nanhai_svg(nanhai_width){
                     .attr("y",0)
                   .attr("width",width)
                   .attr("height",width*0.172727272)
-                  .attr("opacity",0.8)
+                  .attr("opacity",0)
             svg.append("rect")
                 .attr("class","return_rect")
                 .attr("width",width*0.2924)
@@ -899,7 +827,7 @@ function add_nanhai_svg(nanhai_width){
                 .attr("class","title_rect")
                     .attr("x",0)
                     .attr("y",width*0.003)
-                  .attr("width",width*0.01212)
+                  .attr("width",width*0.01212)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
                   .attr("height",width*0.0515)
                   .attr("rx",width*0.005)
                   .attr("ry",width*0.005)
@@ -1033,6 +961,7 @@ function add_nanhai_svg(nanhai_width){
 
         d3.selectAll(".return_text").attr("opacity",0)
         d3.selectAll(".return_rect").attr("opacity",0)
+        d3.selectAll(".cover_rect").attr("opacity",0)
 
         proj=proj_china
         path=d3.geoPath().projection(proj);
@@ -1242,6 +1171,7 @@ function add_nanhai_svg(nanhai_width){
         d3.selectAll(".remark_text").attr("opacity",0)
         d3.selectAll(".return_text").attr("opacity",1)
         d3.selectAll(".return_rect").attr("opacity",1)
+        d3.selectAll(".cover_rect").attr("opacity",0.8)
         let other_cp=temp_country.properties.cp
         for(var i=0;i<map_data.features.length;i++){
             if(hasRelation(temp_country,map_data.features[i])==1){
