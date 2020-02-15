@@ -890,6 +890,9 @@
         d3.selectAll(".state")
             .selectAll("path")
             .attr("d",path)
+        d3.selectAll(".islands")
+            .selectAll("path")
+            .attr("d",path)
 
         d3.selectAll(".country_num_text")
             .text(function(d){
@@ -1095,6 +1098,9 @@
                         .translate([width/2, height/2]);
         path=d3.geoPath().projection(proj);
         d3.selectAll(".state")
+            .selectAll("path")
+            .attr("d",path)
+        d3.selectAll(".islands")
             .selectAll("path")
             .attr("d",path)
 
