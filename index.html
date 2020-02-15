@@ -13,21 +13,9 @@
             height: 100vh;
             overflow-x: hidden;
         }
-        @font-face {
-            font-family: Khand-Regular;
-            src: url(./font/Khand-Regular.ttf)
-        }
-        @font-face {
-            font-family: PingFang-SC;
-            src: url(./font/PingFang-SC-Regular.ttf)
-        }
-        text{
-            font-family: Khand-Regular PingFang-SC;
-        }
         .title{
                 fill:#333333;
                 font-weight: 600;
-                font-family: PingFang-SC;
         }
         .state {
             fill: rgb(255,255,255);
@@ -80,14 +68,12 @@
             fill-opacity:1;
             cursor:pointer;
             font-weight: bold;
-            font-family: PingFang-SC Khand-Regular;
         }
         .country_text2{
             fill:rgb(50,50,50);
             fill-opacity:1;
             cursor:pointer;
             font-weight: bold;
-            font-family: PingFang-SC Khand-Regular;
         }
         .country_num_text{
             cursor: pointer;
@@ -99,6 +85,9 @@
         }
         .range_text{
             font-weight: bold;
+        }
+        .cover_rect{
+          fill:#ffffff;
         }
         #mapPanel{
             position: absolute;
@@ -112,7 +101,7 @@
               width: 87.187vw;
               height: 163.3333333vw;
               left: 6.66667vw;
-              top: 0.144vw;
+              top: 14.4vw;
               border-radius: 20px;
               border: solid 1px #979797;
               background-color: #ffffff;
@@ -123,7 +112,6 @@
                   top: 7.4666vw;
                   left:32.666666vw;
                   height:85.3333vw;
-                  font-family: PingFang-SC;
                   font-size: 40/7.5vw;
                   font-weight: 500;
                   font-stretch: normal;
@@ -138,7 +126,6 @@
                     top:20.93333vw;
                   width: 72.4vw;
                   height: 124.933333vw;
-                  font-family: PingFang-SC;
                   font-size: 4vw;
                   font-weight: normal;
                   font-stretch: normal;
@@ -161,7 +148,6 @@
                   top:153.733333vw;
                   width: 10vw;
                   height: 6.666666vw;
-                  font-family: PingFang-SC;
                   font-size: 4.8vw;
                   font-weight: 500;
                   font-stretch: normal;
@@ -196,6 +182,14 @@
 <script src="d3.v4.min.js"></script>
 <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
 <script src="chinaMapSupport.js"></script>
+<script>
+    let ua = navigator.userAgent.toLowerCase();
+    let fontFamily = 'Roboto, SourceHanSansCN, “思源黑体”, Noto Sans SC'
+    if (/\(i[^;]+;( U;)? CPU.+Mac OS X/gi.test(ua)) {
+        fontFamily = 'PingFang SC'
+    }
+    d3.select('body').style('font-family', fontFamily)
+</script>
 
 
 </div>
