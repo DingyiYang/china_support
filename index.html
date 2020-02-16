@@ -27,13 +27,13 @@
             fill:none;
             stroke: #de5e5b;
             stroke-width:0.5vw;
-            stroke-dasharray: 1vmin,1vmin;
+            stroke-dasharray: "1vw";
             -webkit-animation:link_changes 1s infinite;
          }
         @-webkit-keyframes link_changes
         {
-            0%   {-webkit-transform:stroke-dasharray: 1vmin,1vmin;}
-            100%  {-webkit-transform:stroke-dasharray: 1vmin,1vmin;stroke-dashoffset:-2vmin;}
+            0%   {-webkit-transform:stroke-dasharray: "1vw";}
+            100%  {-webkit-transform:stroke-dasharray: "1vw";stroke-dashoffset:"-2vw";}
         }
 
         .title_text{
@@ -70,7 +70,7 @@
         #mapPanel{
             position: absolute;
             top:8.933333vw;
-            left:6vw;
+            left:5.33333333vw;
             width:88vw;
             height:104vw;
         }

@@ -161,13 +161,15 @@
 
 
     //基础地图数据获取
-    function getMapData(fileName){
+    function getMapData(fileName,pathDataFile){
         d3.json(fileName).then(cn=>{
             //基础地图数据的赋值
             map_data=cn
-            addMap()
             add_islands()
+            addMap()
             addOtherInfo()
+            getPathData(pathDataFile)
+            hasPath=1
 
             })
     }
@@ -182,6 +184,7 @@
         d3.json(fileName).then(move_path=>{
             //连线数据的赋值
             path_data=move_path
+            addPath(true)
         })
     }
 
@@ -243,7 +246,7 @@
 //进行绘制的各种函数
     //绘制地图
     function add_islands(){
-        d3.json("islands.json").then(cn=>{
+        d3.json("islands(1).json").then(cn=>{
             map_svg.append("g").attr("class","islands").selectAll("path")
                     .data(cn.features)
                     .enter()
@@ -260,6 +263,22 @@
                     .style("stroke-width",function(d){
                         if(d.properties.chinese_name=="湖北") return 5*font_scale
                     })
+            map_svg.append("image")
+                .attr("xlink:href",function(d,i){
+                        return "icon/南海诸岛.svg"
+                    })
+                    .attr("x",function(d){
+                        return width*0.863636
+                    })
+                    .attr("y",function(d){
+                        return width*0.81;
+                    })
+                    .attr("width",width*0.1303030)
+                    .attr("height",width*0.175757)
+                    .attr("opacity",function(d){
+                        //if(d.icon_loc=="") return 0
+                            return 1
+                    })
         })
     }
     function addMap(action){
@@ -268,7 +287,7 @@
             //svg.selectAll(".states").remove()
             }
 
-            map_svg.append("g").attr("class","state").selectAll("path")
+            map_svg.append("g").attr("width",width).attr("height",height).attr("class","state").selectAll("path")
                     .data(map_data.features)
                     .enter()
                     .append("path")              
@@ -348,13 +367,6 @@
                 })
                 .attr("fill-opacity",1)
                 .attr("opacity",1)
-
-            
-            //add_nanhai_svg(d3.min([width*0.13,height*0.13]))
-    }
-
-    //添加区域的名字
-    function addDistrictName(){
             //用于高亮显示的名字
             d3.selectAll(".click_text_1").remove()
             map_svg.selectAll(".click_text_1")
@@ -403,6 +415,13 @@
                 .attr("font-family","")
                 .attr("font-weight","bold")
 
+            
+            //add_nanhai_svg(d3.min([width*0.13,height*0.13]))
+    }
+
+    //添加区域的名字
+    function addDistrictName(){
+
             d3.selectAll(".click_text_2").remove()
             map_svg.selectAll(".click_text_2")
                 .data(map_data.features)
@@ -447,6 +466,7 @@
                 .attr("display","none")
                 .attr("fill","#333333")
                 .attr("font-family","")
+
             d3.selectAll(".click_text_3").remove()
             map_svg.selectAll(".click_text_3")
                 .data(map_data.features)
@@ -542,7 +562,9 @@
                 .style("font-family","")
                 .style("font-weight","bold")
                 .attr("fill-opacity",1)
-                .attr("opacity",1)                         
+                .attr("opacity",function(){
+                    return isregain
+                })                         
                 //.attr("fill", "rgba(247,254,110,1)")
                 .style("fill", "#de5e5b")
     }
@@ -618,8 +640,6 @@
                     .append("path")
                     .attr("class","support_links")
                     .attr("d", function(d){
-                        if(d.source.name=="Russia"||d.target.name=="Tanzania") return link_2(d)
-                        if(d.source.name=="Angola") return link_3(d)
                         return link(d)
                     })
                  //.attr("marker-end","url(#arrow)")
@@ -631,10 +651,7 @@
                 })
                  .attr("stroke-width",0)
                  .attr("fill-opacity",0.06)
-                 .attr("stroke-opacity",0.8)
-                 .style("opacity",function(){
-                    return 0
-                 });
+                 .attr("display","none")
 
             let img_w=width*0.03
             let img_h=img_w/36*50
@@ -741,7 +758,7 @@
                                 .attr("class","end_time_text")
                                 .attr("x",width*0.0348)
                                 .attr("y",width*0.12)
-                                .attr("font-size","3.2vw")
+                                .attr("font-size","3.1vw")
                                 .style("fill","#888888")
                                 //.text("截至 "+(new Date()).toLocaleString()+" 国家卫健委数据统计")
                                 .text("(7:00-10:00左右为数据更新高峰，显示可能略有滞后请谅解)")
@@ -774,22 +791,6 @@
                     .on("click",function(){
                         d3.select("#dataExplain").style("display","")
                     })*/
-            svg.append("image")
-                .attr("xlink:href",function(d,i){
-                        return "icon/南海诸岛.svg"
-                    })
-                    .attr("x",function(d){
-                        return width*0.863636
-                    })
-                    .attr("y",function(d){
-                        return width*0.81;
-                    })
-                    .attr("width",width*0.1303030)
-                    .attr("height",width*0.175757)
-                    .attr("opacity",function(d){
-                        //if(d.icon_loc=="") return 0
-                            return 1
-                    })
         
     }
 //结束绘制，开始各种函数了
@@ -808,75 +809,9 @@
         return 0;
     }
 
-    //刷选展示函数
-    function display(){
-        if(brush_flag<2){
-            brush_flag+=1
-            return
-        }
-        if(d3.event.selection==null){
-            d3.selectAll(".states")//.selectAll("path")
-            .style("fill",function(d,i){
-                    //console.log(d)
-                    if(d.properties.stage=='null'){
-                        return "rgb(255,255,255)"
-                    }
-                    else{
-                        return color(d.properties.stage)
-                    }
-                });
-
-        d3.selectAll(".range_text")
-            .style("fill","none")
-
-            d3.selectAll(".country_text")
-                .style("fill-opacity",function(d){
-                    return .9
-                })
-            d3.selectAll(".country_text2")
-                .style("fill-opacity",function(d){
-                    return .9
-                })
-            d3.selectAll(".support_links")
-                .style("stroke-width",function(d){
-                        return 
-                })
-            d3.selectAll(".mycircle")
-                .attr("r",function(d,i){
-                            return 6*font_scale
-
-                })
-                .style("fill-opacity",function(d,i){
-                    return 0.4
-                })
-
-            return
-
-        } 
-        let s = d3.event.selection;
-        //console.log(s)
-        let s_0=s[0]-timelineY;
-        let s_1=s[1]-timelineY;
-        //console.log(s_0)
-        //console.log(countDate(axis_start,parseInt(s_0*(axis_end-axis_start)/timelineLen)))
-        if(is_date==1){
-            year_0=parseInt(countDate(axis_start,parseInt(s_0*(axis_end-axis_start)/timelineLen)).replaceAll("/",""));
-            year_1=parseInt(countDate(axis_start,parseInt(s_1*(axis_end-axis_start)/timelineLen)).replaceAll("/",""));
-        }
-        else{
-            year_0=axis_start+parseInt(s_0*(axis_end-axis_start)/timelineLen);
-            year_1=axis_start+parseInt(s_1*(axis_end-axis_start)/timelineLen);    
-        }
-        console.log([year_0,year_1])
-
-        change_to_timerange(year_0,year_1)
-
-
-
-    }
-
     function change_to_timerange(year_0,year_1){
         //console.log(year_0,year_1)
+        isregain=1
         d3.selectAll(".remark_text").attr("display","")
         d3.selectAll(".sourceimg").attr("width",0)
         d3.selectAll(".targetimg").attr("width",0)
@@ -1055,9 +990,10 @@
         if(hasPath==0) return true
 
         d3.selectAll(".support_links")
-                .style("stroke-width",function(d){
+                .attr("stroke-width",function(d){
                     return 0
                 })
+                .attr("display","none")
 
              d3.selectAll(".click_text_1")
                 .text("")
@@ -1071,6 +1007,7 @@
     function Showmessage(temp_country){
         
         //console.log("show_message")
+        isregain=0
         d3.selectAll(".remark_text").attr("display","none")
         d3.selectAll(".return_text").attr("display","")
         d3.selectAll(".return_rect").attr("display","")
@@ -1394,22 +1331,15 @@
         //改变连线的显示
         d3.selectAll(".support_links")
             .attr("d", function(d){
-                        if(d.source.name=="Russia"||d.target.name=="Tanzania") return link_2(d)
-                        if(d.source.name=="Angola") return link_3(d)
                         return link(d)
                     })
-            .style("stroke-width",function(d,i){
-                //console.log(d)
+            .attr("display",function(d,i){
                 if(d.source.name==temp_country.properties.name||d.target.name==temp_country.properties.name){
-                    return 2*font_scale;
+                    return "";
                 }
                 else{
-                    return 0
+                    return "none"
                 }
-            })
-            .style("opacity",function(d){
-                if(use_dragBlock==1 && d.date>temp_time) return 0
-                return 1
             })
             //改变图片的透明度
             let img_w=d3.min([width*0.054,height*0.054])
@@ -1541,15 +1471,7 @@
             proj=proj_world
             path = d3.geoPath().projection(proj);
         }
-            getMapData(mapDataFile)
-            if(pathDataFile!=""){
-                getPathData(pathDataFile)
-                hasPath=1
-            }
-            else{
-                    hasPath=0
-                    path_data={}
-                }
+            getMapData(mapDataFile,pathDataFile)
                 
             //getMapNum()
             getApiData()
@@ -1663,7 +1585,6 @@
                         //更改标题的数据截至时间
                         /*svg.select(".end_time_text")
                             .text("截至 2020年"+chinaData[chinaData.length-1]["公开时间"]+"24:00 国家卫健委数据统计")*/
-                        addPath(true)
                         addDistrictName()
                     }, 100);  
             })
