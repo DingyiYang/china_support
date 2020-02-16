@@ -606,7 +606,7 @@
             // height=130% so that the shadow is not clipped
             var filter = defs2.append("filter")
                 .attr("id", "drop-shadow")
-                .attr("height", "140%");
+                .attr("height", "130%");
 
             // SourceAlpha refers to opacity of graphic that this filter will be applied to
             // convolve that with a Gaussian with standard deviation 3 and store result
@@ -649,7 +649,8 @@
                  .attr("filter", function(d){
                     return "url(#drop-shadow)";
                 })
-                 .attr("stroke-width",0)
+                 .style("stroke-dasharray","1vw")
+                 //.attr("stroke-width",0)
                  .attr("fill-opacity",0.06)
                  .attr("display","none")
 

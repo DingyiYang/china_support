@@ -27,14 +27,20 @@
             fill:none;
             stroke: #de5e5b;
             stroke-width:0.5vw;
-            stroke-dasharray: "1vw";
-            -webkit-animation:link_changes 1s infinite;
+            animation:link_changes 1s linear 0s infinite ;
+            -webkit-animation:link_changes 1s linear 0s infinite ;
          }
-        @-webkit-keyframes link_changes
+         @keyframes link_changes
         {
-            0%   {-webkit-transform:stroke-dasharray: "1vw";}
-            100%  {-webkit-transform:stroke-dasharray: "1vw";stroke-dashoffset:"-2vw";}
+            0%   {}
+            100%  {stroke-dashoffset:-2vw;}
         }
+         @-webkit-keyframes link_changes
+        {
+            0%   {}
+            100%  {stroke-dashoffset:-2vw;}
+        }
+
 
         .title_text{
             font-size: 30;
